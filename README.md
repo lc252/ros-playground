@@ -5,7 +5,7 @@ my srs work yay!!!
 
 - git add .
 - git commit -m "`comment`"
-- git deploy https://github.com/lc252/srs-digital-twins.git `branch name`
+- git push https://github.com/lc252/srs-digital-twins.git `branch name`
 
 
 ## git fetch list
