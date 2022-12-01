@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\devel\\lib\\pkgconfig",
+    "\\src",
+    "\\src\\beginner_tutorials",
+    "\\src\\beginner_tutorials\\launch",
+    "\\src\\beginner_tutorials\\msg",
+    "\\src\\beginner_tutorials\\scripts",
+    "\\src\\beginner_tutorials\\src"
+  ],
+  "SelectedNode": "\\src\\beginner_tutorials\\scripts\\talker.py",
+  "PreviewInSolutionExplorer": false
+}

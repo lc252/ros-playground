@@ -1,0 +1,16 @@
+{
+    "ros.distro": "noetic",
+    "python.autoComplete.extraPaths": [
+        "C:/opt/ros/noetic/catkin_ws/devel\\lib/site-packages",
+        "c:\\opt\\ros\\noetic\\x64\\lib/site-packages",
+        "C:\\opt\\ros\\noetic\\x64\\Lib\\site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "C:/opt/ros/noetic/catkin_ws/devel\\lib/site-packages",
+        "c:\\opt\\ros\\noetic\\x64\\lib/site-packages",
+        "C:\\opt\\ros\\noetic\\x64\\Lib\\site-packages"
+    ],
+    "files.associations": {
+        "vector": "cpp"
+    }
+}
