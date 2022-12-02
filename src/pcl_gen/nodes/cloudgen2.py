@@ -3,6 +3,8 @@ import numpy as np
 from sensor_msgs.msg import PointCloud2, PointField
 import time
 
+
+
 def random_PointCloud2(n):
     # generate a sensor_msgs.PointCloud2 object with n random points in 1x1m cube
     
@@ -95,7 +97,6 @@ def magic_carpet(n):
     return pc2
 
 
-
 def cloudgen():
     # publish a sensor_msgs.PointCloud2 msg to topic pt_cloud_gen @ 1Hz 
     pub = rospy.Publisher("PointCloud2", PointCloud2, queue_size=1)
@@ -104,10 +105,11 @@ def cloudgen():
 
     while not rospy.is_shutdown():
 
-        pub.publish(magic_carpet(50*50))
+        pub.publish(random_PointCloud2(1000))
 
         rate.sleep()
         
+
 
 if __name__ == '__main__':
     try:
