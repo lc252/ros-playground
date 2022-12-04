@@ -67,3 +67,5 @@ else()
 endif()
 
 catkin_workspace()
+
+catkin_python_setup()
