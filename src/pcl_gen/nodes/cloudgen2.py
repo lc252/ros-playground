@@ -105,7 +105,7 @@ def cloudgen():
 
     while not rospy.is_shutdown():
 
-        pub.publish(random_PointCloud2(1000))
+        pub.publish(magic_carpet(50*50))
 
         rate.sleep()
         
