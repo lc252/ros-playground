@@ -36,10 +36,10 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 
     // Convert to ROS data type
     pcl_msgs::PointIndices;
-    //pcl_msgs::PointNormal out;
-    pcl_conversions::fromPCL(mls_points, output);
+    //pcl_msgs::PointNormal output;     // does not exist
+    // pcl_conversions::fromPCL(mls_points, output);
     // Publish the data
-    pub.publish (output);
+    // pub.publish (output);
 }
 
 
