@@ -35,14 +35,14 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 int main (int argc, char** argv)
 {
   // Initialize ROS
-  ros::init(argc, argv, "my_pcl_tutorial");
+  ros::init(argc, argv, "voxel_example");
   ros::NodeHandle nh;
 
   // Create a ROS subscriber for the input point cloud
   ros::Subscriber sub = nh.subscribe("input", 1, cloud_cb);
 
   // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<sensor_msgs::PointCloud2>("output", 1);
+  pub = nh.advertise<sensor_msgs::PointCloud2>("output_voxel", 1);
 
   // Spin
   ros::spin();
