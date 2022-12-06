@@ -22,8 +22,8 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
     pcl::PointCloud<pcl::PointNormal> mls_points;
     pcl::MovingLeastSquares<pcl::PointXYZ, pcl::PointNormal> mls;
     mls.setComputeNormals (true);
-    mls.setInputCloud (cloud.makeShared());
-    mls.setPolynomialOrder (1);
+    mls.setInputCloud (cloud.makeShared());     // setInputCloud for the MLS filter requires const pcl::shared_ptr<const pcl::PointCloud<pcl::PointXYZ>> &cloud
+    mls.setPolynomialOrder (1);     // higher degree takes more to process
     mls.setSearchMethod (tree);
     mls.setSearchRadius (0.1);
 
