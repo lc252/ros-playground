@@ -156,7 +156,7 @@ def two_planes(n):
 
 def cloudgen():
     # publish a sensor_msgs.PointCloud2 msg to topic pt_cloud_gen @ 1Hz 
-    pub = rospy.Publisher("input", PointCloud2, queue_size=1)
+    pub = rospy.Publisher("raw_points", PointCloud2, queue_size=1)
     rospy.init_node("pt_cloud_gen", anonymous=True)
     rate = rospy.Rate(24)
 

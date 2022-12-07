@@ -15,7 +15,7 @@ def random_Point32():
     return point
 
 def cloudgen():
-    pub = rospy.Publisher("PointCloud", PointCloud, queue_size=1)
+    pub = rospy.Publisher("raw_points", PointCloud, queue_size=1)
     rospy.init_node("pt_cloud_gen", anonymous=True)
     rate = rospy.Rate(1)
 
