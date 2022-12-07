@@ -207,3 +207,6 @@ catkin_install_python(PROGRAMS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(pcd_publisher src/pcd_publisher.cpp)
+target_link_libraries(pcd_publisher ${catkin_LIBRARIES})
