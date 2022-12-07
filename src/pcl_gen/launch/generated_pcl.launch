@@ -1,0 +1,16 @@
+<launch>
+
+    <node pkg="pcl_gen" name="random_cloud2" type="cloudgen2.py">
+        <remap from="raw_points" to="raw_points/cloud2"/>
+    </node>
+
+    <node pkg="pcl_gen" name="random_cloud" type="cloudgen.py">
+        <remap from="raw_points" to="raw_points/cloud"/>
+    </node>
+
+    <node pkg="pcl_gen" name="pcd_cloud" type="pcd_publisher">
+        <remap from="raw_points" to="raw_points/pcd_cloud"/>
+    </node>
+
+
+</launch>

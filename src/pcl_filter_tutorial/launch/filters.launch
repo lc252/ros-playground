@@ -1,0 +1,18 @@
+<launch>
+
+    <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
+        <remap from="input" to="raw_points/cloud2"/>
+        <remap from="output_voxel" to="filtered_points/voxel"/>
+    </node>
+    <node pkg="pcl_filter_tutorial" name="passthrough_filter" type="passthrough_example">
+        <remap from="input" to="raw_points/cloud2"/>
+        <remap from="output_passthrough" to="filtered_points/passthrough"/>
+    </node>
+    <!-- <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
+        <remap from="input" to="raw_points"/>
+    </node>
+    <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
+        <remap from="input" to="raw_points"/>
+    </node> -->
+
+</launch>
