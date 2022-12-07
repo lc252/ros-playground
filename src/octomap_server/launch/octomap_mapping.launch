@@ -13,8 +13,13 @@
 		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
 		<param name="frame_id" type="string" value="point_frame" />
 		
+		<param name="height_map" value="false" />
+
 		<!-- maximum range to integrate (speedup!) -->
-		<param name="sensor_model/max_range" value="5.0" />
+		<param name="sensor_model/hit" value="0.7" />
+		<param name="sensor_model/miss" value="0.4" />
+		<param name="sensor_model/min" value="0.12" />
+		<param name="sensor_model/max" value="0.97" />
 		
 		<!-- data source to integrate (PointCloud2) -->
 		<remap from="cloud_in" to="/output_voxel" />
