@@ -5,9 +5,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-#include <iostream>
 #include <pcl/ModelCoefficients.h>
-#include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/sample_consensus/method_types.h>
 #include <pcl/sample_consensus/model_types.h>
@@ -75,20 +73,20 @@ int filter_callback(const sensor_msgs::PointCloud2ConstPtr& input)
         extract.setInputCloud (cloud_filtered);
         extract.setIndices (inliers);
         extract.setNegative (false);
+        // cloud plane
         extract.filter (*cloud_p);
         // std::cerr << "PointCloud representing the planar component: " << cloud_p->width * cloud_p->height << " data points." << std::endl;
 
-        // Create the filtering object
+        // get the part of the cloud that was not in the largest planar section
         extract.setNegative (true);
         extract.filter (*cloud_f);
         // make cloud_filtered cloud_f so that the remaining points are processed in the next iteration
         cloud_filtered.swap (cloud_f);
-        i++;
 
         // convert the output which is a PCL PointCloud<T> to a sensor_msgs PointCloud2
         sensor_msgs::PointCloud2 output;
         pcl::toROSMsg(*cloud_p, output);
-        pub.publish(output);
+        pub.publish(output);    // Problem with this at the moment where both point clouds will be sent separately on the same topic
     }
 
     return (0);
@@ -96,16 +94,16 @@ int filter_callback(const sensor_msgs::PointCloud2ConstPtr& input)
 
 int main (int argc, char** argv)
 {
-  // Initialize ROS
-  ros::init(argc, argv, "passthrough_example");
-  ros::NodeHandle nh;
+    // Initialize ROS
+    ros::init(argc, argv, "extract_indices_example");
+    ros::NodeHandle nh;
 
-  // Create a ROS subscriber for the input point cloud
-  ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2>("input", 1, filter_callback);
+    // Create a ROS subscriber for the input point cloud
+    ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2>("input", 1, filter_callback);
 
-  // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<sensor_msgs::PointCloud2>("output_indices", 1);
+    // Create a ROS publisher for the output point cloud
+    pub = nh.advertise<sensor_msgs::PointCloud2>("output_indices", 1);
 
-  // Spin
-  ros::spin();
+    // Spin
+    ros::spin();
 }
