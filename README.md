@@ -1,5 +1,5 @@
 # srs-digital-twins
-my srs work yay!!!
+my srs work
 
 ## git deploy list
 
