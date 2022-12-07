@@ -8,10 +8,11 @@
         <remap from="input" to="raw_points/cloud2"/>
         <remap from="output_passthrough" to="filtered_points/passthrough"/>
     </node>
-    <!-- <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
-        <remap from="input" to="raw_points"/>
+    <node pkg="pcl_filter_tutorial" name="cluster_filter" type="euclidean_clusters">
+        <remap from="input" to="raw_points/pcd_cloud"/>
+        <remap from="clusters" to="filtered_points/clusters"/>
     </node>
-    <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
+    <!-- <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
         <remap from="input" to="raw_points"/>
     </node> -->
 

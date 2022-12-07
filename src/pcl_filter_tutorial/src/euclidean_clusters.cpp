@@ -98,6 +98,8 @@ int clusters_cb(const sensor_msgs::PointCloud2ConstPtr& input)
         // convert the output which is a PCL PointCloud<T> to a sensor_msgs PointCloud2
         sensor_msgs::PointCloud2 output;
         pcl::toROSMsg(*cloud_cluster, output);
+
+        output.header.frame_id = "point_frame";
         pub.publish(output);    // Problem with this at the moment where all clusters will be sent separately on the same topic
     }
 
