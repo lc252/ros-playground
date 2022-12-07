@@ -77,7 +77,7 @@ def magic_carpet(n):
     x = np.ndarray.flatten(x)
     y = np.ndarray.flatten(y)
 
-    z = np.sin(x * 2*np.pi*0.5 + time.time())*0.5 + 0.5# + np.sin(y * 2*np.pi*0.25 + time.time())*0.25 
+    z = np.sin(x + 2*np.pi*0.05*time.time())*0.5 + 0.5# + np.sin(y * 2*np.pi*0.25 + time.time())*0.25 
 
     # add some noise to be filtered later
     noise = np.random.rand(*np.shape(z)) * 0.05
