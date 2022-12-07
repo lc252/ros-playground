@@ -3,6 +3,8 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+ros::Publisher pub;
+
 int read_cb(std::string filename)
 {
     pcl::PCDReader reader;
@@ -12,6 +14,9 @@ int read_cb(std::string filename)
 
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(*cloud, output);
+    output.header.frame_id = "point_frame";
+
+    pub.publish(output);
 
     return 0;
 }
@@ -23,12 +28,11 @@ int main(int argc, char** argv)
 
     ros::Rate loop_rate(1);
 
-    ros::Publisher pub;
     pub = n.advertise<sensor_msgs::PointCloud2>("pcd_pointcloud", 1);
 
     while(ros::ok())
     {
-        read_cb("table_scene_lms400.pcd");
+        read_cb("/home/lachl/projects/srs-digital-twins/pcd_files/table_scene_lms400.pcd");
         ros::spinOnce();
         loop_rate.sleep();
     }
