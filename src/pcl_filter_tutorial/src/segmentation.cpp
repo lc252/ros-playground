@@ -41,7 +41,7 @@ int main (int argc, char** argv)
     // Create a ROS subscriber for the input point cloud
     ros::Subscriber sub = nh.subscribe("input", 1, cloud_cb);
     // Create a ROS publisher for the output point cloud
-    pub = nh.advertise<pcl_msgs::ModelCoefficients>("output_segmented", 1);
+    pub = nh.advertise<pcl_msgs::ModelCoefficients>("output", 1);
     // Spin
     ros::spin();
 }
