@@ -102,7 +102,7 @@ int main (int argc, char** argv)
     ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2>("input", 1, filter_callback);
 
     // Create a ROS publisher for the output point cloud
-    pub = nh.advertise<sensor_msgs::PointCloud2>("output_indices", 1);
+    pub = nh.advertise<sensor_msgs::PointCloud2>("output", 1);
 
     // Spin
     ros::spin();

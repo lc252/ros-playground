@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 
     while(ros::ok())
     {
-        read_cb("/home/lachl/projects/srs-digital-twins/pcd_files/table_scene_lms400.pcd");
+        read_cb("/home/fif/lc252/srs-digital-twins/pcd_files/table_scene_lms400.pcd");
         ros::spinOnce();
         loop_rate.sleep();
     }
