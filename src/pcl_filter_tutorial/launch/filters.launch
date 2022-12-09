@@ -1,17 +1,17 @@
 <launch>
 
     <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
-        <remap from="input" to="raw_points/cloud2"/>
+        <remap from="input" to="camera/depth/color/points"/>
         <remap from="output_voxel" to="filtered_points/voxel"/>
     </node>
     <node pkg="pcl_filter_tutorial" name="passthrough_filter" type="passthrough_example">
-        <remap from="input" to="raw_points/cloud2"/>
+        <remap from="input" to="camera/depth/color/points"/>
         <remap from="output_passthrough" to="filtered_points/passthrough"/>
     </node>
-    <node pkg="pcl_filter_tutorial" name="cluster_filter" type="euclidean_clusters">
+    <!-- <node pkg="pcl_filter_tutorial" name="cluster_filter" type="euclidean_clusters">
         <remap from="input" to="raw_points/pcd_cloud"/>
         <remap from="clusters" to="filtered_points/clusters"/>
-    </node>
+    </node> -->
     <!-- <node pkg="pcl_filter_tutorial" name="voxel_filter" type="voxel_example">
         <remap from="input" to="raw_points"/>
     </node> -->
