@@ -9,12 +9,12 @@
         <remap from="output_passthrough" to="filtered_points/passthrough"/>
     </node>
     <node pkg="pcl_filter_tutorial" name="cluster_filter" type="euclidean_clusters">
-        <remap from="input" to="raw_points"/>
+        <remap from="input" to="camera/depth/color/points"/>
         <remap from="clusters" to="filtered_points/clusters"/>
     </node>
-    <!-- <node pkg="pcl_filter_tutorial" name="planar_segmentation_filter" type="extract_indices">
-        <remap from="input" to="raw_points"/>
+    <node pkg="pcl_filter_tutorial" name="planar_segmentation_filter" type="extract_indices">
+        <remap from="input" to="filtered_points/passthrough"/>
         <remap from="output" to="filtered_points/planar_segmented"/>
-    </node> -->
+    </node>
 
 </launch>

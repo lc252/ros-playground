@@ -22,7 +22,7 @@ void filter_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     pcl::PassThrough<pcl::PCLPointCloud2> pass;
     pass.setInputCloud(cloudPtr);
     pass.setFilterFieldName("z");
-    pass.setFilterLimits(0.5, 1.0);
+    pass.setFilterLimits(0, 1);
     pass.filter(cloud_filtered);
 
     // Convert to ROS data type
