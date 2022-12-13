@@ -1,8 +1,11 @@
 <launch>
+  <!-- Leave these settings blank for auto configuration -->
   <arg name="serial_no"           default=""/>
   <arg name="usb_port_id"         default=""/>
   <arg name="device_type"         default=""/>
-  <arg name="json_file_path"      default=""/>
+
+  <!-- <arg name="json_file_path"      default=""/> -->
+
   <arg name="camera"              default="camera"/>
   <arg name="tf_prefix"           default="$(arg camera)"/>
   <arg name="external_manager"    default="false"/>
@@ -10,6 +13,7 @@
   <arg name="output"              default="screen"/>
   <arg name="respawn"              default="false"/>
 
+  <!-- Fisheye not available for D435i -->
   <arg name="fisheye_width"       default="-1"/>
   <arg name="fisheye_height"      default="-1"/>
   <arg name="enable_fisheye"      default="false"/>
@@ -17,10 +21,11 @@
   <arg name="depth_width"         default="-1"/>
   <arg name="depth_height"        default="-1"/>
   <arg name="enable_depth"        default="true"/>
-
+  
+  <!-- Confidence not available for D435i -->
   <arg name="confidence_width"    default="-1"/>
   <arg name="confidence_height"   default="-1"/>
-  <arg name="enable_confidence"   default="true"/>
+  <arg name="enable_confidence"   default="false"/>
   <arg name="confidence_fps"      default="-1"/>
 
   <arg name="infra_width"         default="848"/>
@@ -40,8 +45,9 @@
   <arg name="color_fps"           default="-1"/>
   <arg name="gyro_fps"            default="-1"/>
   <arg name="accel_fps"           default="-1"/>
-  <arg name="enable_gyro"         default="false"/>
-  <arg name="enable_accel"        default="false"/>
+  <arg name="enable_gyro"         default="true"/>
+  <arg name="enable_accel"        default="true"/>
+  <arg name="odom_frame_id"       default="camera_odom_frame"/>
 
   <arg name="enable_pointcloud"         default="true"/>
   <arg name="pointcloud_texture_stream" default="RS2_STREAM_COLOR"/>
@@ -49,7 +55,7 @@
   <arg name="allow_no_texture_points"   default="false"/>
   <arg name="ordered_pc"                default="false"/>
 
-  <arg name="enable_sync"               default="false"/>
+  <arg name="enable_sync"               default="true"/>
   <arg name="align_depth"               default="false"/>
 
   <arg name="publish_tf"                default="true"/>
@@ -61,7 +67,7 @@
   <arg name="initial_reset"             default="false"/>
   <arg name="reconnect_timeout"         default="6.0"/>
   <arg name="wait_for_device_timeout"   default="-1.0"/>
-  <arg name="unite_imu_method"          default=""/>
+  <arg name="unite_imu_method"          default="copy"/> <!-- Options are: [none, copy, linear_interpolation] -->
   <arg name="topic_odom_in"             default="odom_in"/>
   <arg name="calib_odom_file"           default=""/>
   <arg name="publish_odom_tf"           default="true"/>
@@ -83,7 +89,7 @@
       <arg name="serial_no"                value="$(arg serial_no)"/>
       <arg name="usb_port_id"              value="$(arg usb_port_id)"/>
       <arg name="device_type"              value="$(arg device_type)"/>
-      <arg name="json_file_path"           value="$(arg json_file_path)"/>
+      <!-- <arg name="json_file_path"           value="$(arg json_file_path)"/> -->
 
       <arg name="enable_pointcloud"        value="$(arg enable_pointcloud)"/>
       <arg name="pointcloud_texture_stream" value="$(arg pointcloud_texture_stream)"/>
