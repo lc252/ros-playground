@@ -204,3 +204,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(hello_realsense src/hello_realsense.cpp)
+target_link_libraries(hello_realsense ${catkin_LIBRARIES})
