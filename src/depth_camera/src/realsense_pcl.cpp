@@ -7,6 +7,7 @@
 
 ros::Publisher pub;
 rs2::pipeline p;
+rs2::config cfg;
 
 using pcl_ptr = pcl::PointCloud<pcl::PointXYZ>::Ptr;
 
@@ -37,7 +38,9 @@ int cloud_cb()
 
     auto frames = p.wait_for_frames();
     auto depth = frames.get_depth_frame();
+    auto rgb = frames.get_color_frame();
 
+    pc.map_to(rgb);
     points = pc.calculate(depth);
     auto pcl_cloud = rs_points_to_pcl(points);
 
@@ -58,7 +61,12 @@ int main(int argc, char** argv)
 
     pub = nh.advertise<sensor_msgs::PointCloud2>("rs_points", 1);
 
-    p.start();
+    // configure and start realsense pipeline
+    cfg.enable_stream(RS2_STREAM_COLOR, 1280, 720, RS2_FORMAT_BGR8, 30);
+    cfg.enable_stream(RS2_STREAM_INFRARED, 1280, 720, RS2_FORMAT_Y8, 30);
+    cfg.enable_stream(RS2_STREAM_DEPTH, 1280, 720, RS2_FORMAT_Z16, 30);
+    p.start(cfg);
+
     
     while(ros::ok())
     {
