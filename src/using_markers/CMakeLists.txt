@@ -213,5 +213,5 @@ target_link_libraries(basic_shapes ${catkin_LIBRARIES})
 add_executable(points_and_lines src/points_and_lines.cpp)
 target_link_libraries(points_and_lines ${catkin_LIBRARIES})
 
-add_executable(interactive_markers src/interactive_markers.cpp)
-target_link_libraries(interactive_markers ${catkin_LIBRARIES})
+add_executable(interactive src/interactive.cpp)
+target_link_libraries(interactive ${catkin_LIBRARIES})
