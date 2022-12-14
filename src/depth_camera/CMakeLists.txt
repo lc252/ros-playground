@@ -11,6 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   realsense2_camera
   roscpp
   rospy
+  pcl_conversions
+  pcl_ros
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -205,5 +208,9 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+find_package(realsense2)
+
 add_executable(hello_realsense src/hello_realsense.cpp)
-target_link_libraries(hello_realsense ${catkin_LIBRARIES})
+target_link_libraries(hello_realsense ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
+add_executable(realsense_pcl src/realsense_pcl.cpp)
+target_link_libraries(realsense_pcl ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
