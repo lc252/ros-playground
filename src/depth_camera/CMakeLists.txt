@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
   tf
+  realsense2
 )
 
 ## System dependencies are found with CMake's conventions
@@ -208,7 +209,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-find_package(realsense2)
 
 add_executable(hello_realsense src/hello_realsense.cpp)
 target_link_libraries(hello_realsense ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})

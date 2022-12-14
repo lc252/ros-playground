@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   visualization_msgs
   geometry_msgs
+  interactive_markers
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -207,11 +209,13 @@ catkin_install_python(PROGRAMS
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+# find_package(interactive_markers)
+
 add_executable(basic_shapes src/basic_shapes.cpp)
 target_link_libraries(basic_shapes ${catkin_LIBRARIES})
 
 add_executable(points_and_lines src/points_and_lines.cpp)
 target_link_libraries(points_and_lines ${catkin_LIBRARIES})
 
-add_executable(interactive src/interactive.cpp)
-target_link_libraries(interactive ${catkin_LIBRARIES})
+add_executable(interactive6dof src/interactive6dof.cpp)
+target_link_libraries(interactive6dof ${catkin_LIBRARIES})
