@@ -155,7 +155,7 @@
   </group>
   
   <group ns="camera_transforms">
-    <node pkg="tf" type="static_transform_publisher" name="camera_map_transform" args="0 0 0 0 0 0 map camera_link 100">
+    <node pkg="tf" type="static_transform_publisher" name="map_base_tf" args="0 0 0 0 0 0 map base_link 10">
     </node>
   </group>
 </launch>
