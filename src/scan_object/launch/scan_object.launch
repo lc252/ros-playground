@@ -10,6 +10,9 @@
         args="0 0 0 0 0 0 map base_link 100">
     </node>
 
+    <node pkg="scan_object" name="cloud_adder" type="add_clouds">
+    </node>
+
     <include file="$(find depth_camera)/launch/rs_camera.launch">
     </include>
 </launch>
