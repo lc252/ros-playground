@@ -7,7 +7,7 @@ ros::Publisher pub;
 pcl::PointCloud<pcl::PointXYZRGB> cloud_out;
 
 
-void aggregate_cloud(sensor_msgs::PointCloud2& cloud_in)
+void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
 {
     pcl::PointCloud<pcl::PointXYZRGB> new_cloud;
     pcl::fromROSMsg(cloud_in, new_cloud);
