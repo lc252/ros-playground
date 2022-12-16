@@ -141,20 +141,19 @@ void make6DofMarker()
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "basic_controls");
+    ros::init(argc, argv, "camera_control");
     ros::NodeHandle n;
 
     // create a timer to update the published transforms
     ros::Timer frame_timer = n.createTimer(ros::Duration(0.01), frameCallback);
 
-    server.reset( new interactive_markers::InteractiveMarkerServer("basic_controls","",false) );
+    server.reset( new interactive_markers::InteractiveMarkerServer("camera_control","",false) );
 
     ros::Duration(0.1).sleep();
 
     make6DofMarker();
 
     server->applyChanges();
-
 
     ros::spin();
 
