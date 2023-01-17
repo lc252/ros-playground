@@ -111,7 +111,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -119,14 +119,14 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 3
+      Size (Pixels): 1
       Size (m): 0.009999999776482582
-      Style: Flat Squares
+      Style: Points
       Topic: /cloud_map
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -147,9 +147,9 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 3
+      Size (Pixels): 1
       Size (m): 0.009999999776482582
-      Style: Flat Squares
+      Style: Points
       Topic: /transformed_cloud
       Unreliable: false
       Use Fixed Frame: true
@@ -183,7 +183,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.5599021911621094
+      Distance: 1.6793901920318604
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -199,9 +199,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.595397412776947
+      Pitch: 0.5003973245620728
       Target Frame: <Fixed Frame>
-      Yaw: 4.080395221710205
+      Yaw: 5.2304182052612305
     Saved:
       - Class: rviz/Orbit
         Distance: 1.9956445693969727
