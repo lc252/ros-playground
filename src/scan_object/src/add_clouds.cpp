@@ -4,12 +4,12 @@
 
 
 ros::Publisher pub;
-pcl::PointCloud<pcl::PointXYZRGB> cloud_out;
+pcl::PointCloud<pcl::PointXYZ> cloud_out;
 
 
 void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
 {
-    pcl::PointCloud<pcl::PointXYZRGB> new_cloud;
+    pcl::PointCloud<pcl::PointXYZ> new_cloud;
     pcl::fromROSMsg(cloud_in, new_cloud);
 
     // filter new_cloud as aggregating clouds tends to be expensive
@@ -20,7 +20,7 @@ void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
 
     sensor_msgs::PointCloud2 ros_cloud;
     pcl::toROSMsg(cloud_out, ros_cloud);
-    ros_cloud.header.frame_id = "map";
+    ros_cloud.header.frame_id = "point_map";
     pub.publish(ros_cloud);
 }
 
