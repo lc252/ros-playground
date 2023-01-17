@@ -7,12 +7,14 @@
     </node>
 
     <node pkg="tf" name="map_to_base" type="static_transform_publisher"
-        args="0 0 0 0 0 0 map base_link 100">
+        args="0 0 0 0 0 0 map point_map 100">
     </node>
 
     <node pkg="scan_object" name="cloud_adder" type="add_clouds">
     </node>
 
-    <include file="$(find depth_camera)/launch/rs_camera.launch">
-    </include>
+    <!-- <include file="$(find depth_camera)/launch/rs_camera.launch">
+    </include> -->
+    <node pkg="depth_camera" name="depth" type="depth_cloud">
+    </node>
 </launch>
