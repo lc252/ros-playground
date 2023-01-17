@@ -39,7 +39,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr PCL_Conversion(const rs2::points& points){
     // and RGB values
     for (int i = 0; i < points.size(); i++)
     {   
-        // map xyz
+        // map xyz, alter to fit with the world xyz frame
         cloud->points[i].x = Vertex[i].z;
         cloud->points[i].y = -Vertex[i].x;
         cloud->points[i].z = -Vertex[i].y;
@@ -59,9 +59,7 @@ int cloud_cb()
 
     auto frames = p.wait_for_frames();
     auto depth = frames.get_depth_frame();
-    // auto rgb = frames.get_color_frame();
 
-    // pc.map_to(rgb);
     points = pc.calculate(depth);
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = PCL_Conversion(points);
 
@@ -85,7 +83,7 @@ int main(int argc, char** argv)
     pub = nh.advertise<sensor_msgs::PointCloud2>("depth_points", 1);
 
     // configure and start realsense pipeline
-    //cfg.enable_stream(RS2_STREAM_INFRARED, 1280, 720, RS2_FORMAT_Y8, 30);
+    // 1280x720 produces more points but much slower
     cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
     p.start(cfg);
 

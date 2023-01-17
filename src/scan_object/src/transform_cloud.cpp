@@ -8,81 +8,62 @@
 #include <pcl/common/transforms.h>
 
 
-pcl::PointCloud<pcl::PointXYZ> cloud;
+pcl::PointCloud<pcl::PointXYZ> input_cloud;
 
 ros::Publisher pub;
 
 
 void retrieve_cloud(const sensor_msgs::PointCloud2 cloud2_msg)
 {
-    pcl::fromROSMsg(cloud2_msg, cloud);
+    pcl::fromROSMsg(cloud2_msg, input_cloud);
 }
 
 void transform_cloud(tf::StampedTransform camera_transform)
 {
-    // get translation and rotation vectors
-    tf::Vector3 t_m = camera_transform.getOrigin(); 
-    tf::Quaternion r_m = camera_transform.getRotation();
-
-    double roll, pitch, yaw;
-    tf::Matrix3x3 (r_m).getRPY(roll, pitch, yaw);
-    std::cout << roll << " " << pitch << " " << yaw << std::endl;
-    std::cout << t_m[0] << t_m[1] << t_m[2] << std::endl;
-
-    // construct a pcl transform
-    Eigen::Affine3f transform = Eigen::Affine3f::Identity();
-
-
-    // translate - x, y, z
-    transform.translation() << t_m[0], t_m[1], t_m[2];
-    
-    // taking the tf base_link->camera_link
-    transform.rotate(Eigen::AngleAxisf(roll, Eigen::Vector3f::UnitX()));
-    transform.rotate(Eigen::AngleAxisf(pitch, Eigen::Vector3f::UnitY()));
-    transform.rotate(Eigen::AngleAxisf(yaw, Eigen::Vector3f::UnitZ()));
-    
-    // execute transform
-    pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
-    pcl::transformPointCloud(cloud, transformed_cloud, transform);
-
-
-    // create and publish ROS PointCloud2
-    sensor_msgs::PointCloud2 ros_cloud;
-    pcl::toROSMsg(transformed_cloud, ros_cloud);
-    ros_cloud.header.frame_id = "point_map";
-    pub.publish(ros_cloud);
-}
-
-void transform_from_quat(tf::StampedTransform camera_transform)
-{
+    // get translation and rotation from the transform
     tf::Vector3 t = camera_transform.getOrigin(); 
     tf::Quaternion q = camera_transform.getRotation();
 
-    std::cout << "x: " << t[0] << " y: " << t[1] << " z: " << t[2] << std::endl;
+    // console output
+    std::cout << "x: " << t.x() << " y: " << t.y() << " z: " << t.z() << std::endl;
     std::cout << "x: " << q.x() << " y: " << q.y() << " z: " << q.z() << " w: " << q.w() << std::endl;    
 
+    // init matrices compatible with pcl transforms
     Eigen::Quaternionf quat(q.w(), q.x(), q.y(), q.z());
+    Eigen::Vector3f tran(t.x(), t.y(), t.z());
     Eigen::Matrix4f transformation_matrix = Eigen::Matrix4f::Identity();
 
-    // build transformation matrix
-    // rotation
+    // Build transformation matrix
+    /* Description
+    Rotation matrix is 3x3 derived from quaternion, describes a unique rotational pose
+    Translation is a 3x1 vector
+
+    Transformation matrix
+    | R00 R01 R02 T00 |
+    | R10 R11 R12 T01 |
+    | R20 R21 R22 T02 |
+    |   0   0   0   1 |
+    */
+
+    // insert rotation
     transformation_matrix.block<3,3>(0,0) = quat.toRotationMatrix();
-    //translation
-    transformation_matrix(0,3) = t[0];
-    transformation_matrix(1,3) = t[1];
-    transformation_matrix(2,3) = t[2];
+    // insert translation
+    transformation_matrix.block<3,1>(0,3) = tran; // test this line works instead of the following 3 for simplicity
+    // transformation_matrix(0,3) = t[0];
+    // transformation_matrix(1,3) = t[1];
+    // transformation_matrix(2,3) = t[2];
 
     // execute transform
     pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
-    pcl::transformPointCloud(cloud, transformed_cloud, transformation_matrix);
-
+    pcl::transformPointCloud(input_cloud, transformed_cloud, transformation_matrix);
 
     // create and publish ROS PointCloud2
-    sensor_msgs::PointCloud2 ros_cloud;
-    pcl::toROSMsg(transformed_cloud, ros_cloud);
-    ros_cloud.header.frame_id = "point_map";
-    pub.publish(ros_cloud);
+    sensor_msgs::PointCloud2 output_cloud;
+    pcl::toROSMsg(transformed_cloud, output_cloud);
+    output_cloud.header.frame_id = "point_map";
+    pub.publish(output_cloud);
 }
+
 
 int main(int argc, char** argv)
 {
@@ -116,7 +97,7 @@ int main(int argc, char** argv)
         tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
         tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
         // transform_cloud(camera_transform);
-        transform_from_quat(camera_transform);
+        transform_cloud(camera_transform);
         std::cout << "Cloud sent. " << std::endl;
     }
 
