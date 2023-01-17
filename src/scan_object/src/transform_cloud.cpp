@@ -8,7 +8,7 @@
 #include <pcl/common/transforms.h>
 
 
-pcl::PointCloud<pcl::PointXYZRGB> cloud;
+pcl::PointCloud<pcl::PointXYZ> cloud;
 
 ros::Publisher pub;
 
@@ -24,41 +24,65 @@ void transform_cloud(tf::StampedTransform camera_transform)
     tf::Vector3 t_m = camera_transform.getOrigin(); 
     tf::Quaternion r_m = camera_transform.getRotation();
 
+    double roll, pitch, yaw;
+    tf::Matrix3x3 (r_m).getRPY(roll, pitch, yaw);
+    std::cout << roll << " " << pitch << " " << yaw << std::endl;
+    std::cout << t_m[0] << t_m[1] << t_m[2] << std::endl;
+
     // construct a pcl transform
     Eigen::Affine3f transform = Eigen::Affine3f::Identity();
+
 
     // translate - x, y, z
     transform.translation() << t_m[0], t_m[1], t_m[2];
     
-    // rotate - roll, pitch, yaw
-    // must convert quarternion values to RPY for pcl tfs
-    // roll (x-axis rotation)
-    double sinr_cosp = 2 * (r_m[3] * r_m[0] + r_m[1] * r_m[2]);
-    double cosr_cosp = 1 - 2 * (r_m[0] * r_m[0] + r_m[1] * r_m[1]);
-    double roll = std::atan2(sinr_cosp, cosr_cosp);
-    // pitch (y-axis rotation)
-    double pitch = std::asin(2 * (r_m[3] * r_m[1] - r_m[2] * r_m[0]));
-    // yaw (z-axis rotation)
-    double siny_cosp = 2 * (r_m[3] * r_m[2] + r_m[0] * r_m[1]);
-    double cosy_cosp = 1 - 2 * (r_m[1] * r_m[1] + r_m[2] * r_m[2]);
-    double yaw = std::atan2(siny_cosp, cosy_cosp);
-
-    // taking the tf base_link->camera_link, manually tf'ing camera_link->camera_dept_optical_frame
-    transform.rotate(Eigen::AngleAxisf(roll - 1.571*2, Eigen::Vector3f::UnitX()));
-    transform.rotate(Eigen::AngleAxisf(pitch + 1.571, Eigen::Vector3f::UnitY()));
-    transform.rotate(Eigen::AngleAxisf(yaw + 1.571, Eigen::Vector3f::UnitZ()));
+    // taking the tf base_link->camera_link
+    transform.rotate(Eigen::AngleAxisf(roll, Eigen::Vector3f::UnitX()));
+    transform.rotate(Eigen::AngleAxisf(pitch, Eigen::Vector3f::UnitY()));
+    transform.rotate(Eigen::AngleAxisf(yaw, Eigen::Vector3f::UnitZ()));
     
     // execute transform
-    pcl::PointCloud<pcl::PointXYZRGB> transformed_cloud;
+    pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
     pcl::transformPointCloud(cloud, transformed_cloud, transform);
+
 
     // create and publish ROS PointCloud2
     sensor_msgs::PointCloud2 ros_cloud;
     pcl::toROSMsg(transformed_cloud, ros_cloud);
-    ros_cloud.header.frame_id = "map";
+    ros_cloud.header.frame_id = "point_map";
     pub.publish(ros_cloud);
 }
 
+void transform_from_quat(tf::StampedTransform camera_transform)
+{
+    tf::Vector3 t = camera_transform.getOrigin(); 
+    tf::Quaternion q = camera_transform.getRotation();
+
+    std::cout << "x: " << t[0] << " y: " << t[1] << " z: " << t[2] << std::endl;
+    std::cout << "x: " << q.x() << " y: " << q.y() << " z: " << q.z() << " w: " << q.w() << std::endl;    
+
+    Eigen::Quaternionf quat(q.w(), q.x(), q.y(), q.z());
+    Eigen::Matrix4f transformation_matrix = Eigen::Matrix4f::Identity();
+
+    // build transformation matrix
+    // rotation
+    transformation_matrix.block<3,3>(0,0) = quat.toRotationMatrix();
+    //translation
+    transformation_matrix(0,3) = t[0];
+    transformation_matrix(1,3) = t[1];
+    transformation_matrix(2,3) = t[2];
+
+    // execute transform
+    pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
+    pcl::transformPointCloud(cloud, transformed_cloud, transformation_matrix);
+
+
+    // create and publish ROS PointCloud2
+    sensor_msgs::PointCloud2 ros_cloud;
+    pcl::toROSMsg(transformed_cloud, ros_cloud);
+    ros_cloud.header.frame_id = "point_map";
+    pub.publish(ros_cloud);
+}
 
 int main(int argc, char** argv)
 {
@@ -68,7 +92,7 @@ int main(int argc, char** argv)
     ros::Rate rate(30);
 
     // setup cloud subscriber and publisher
-    ros::Subscriber sub = nh.subscribe("camera/depth/color/points", 1, retrieve_cloud);
+    ros::Subscriber sub = nh.subscribe("depth_points", 1, retrieve_cloud);
     pub = nh.advertise<sensor_msgs::PointCloud2>("transformed_cloud", 1);    // declared globally
 
     // setup camera transform listener
@@ -89,9 +113,10 @@ int main(int argc, char** argv)
         ros::Duration delay(0.01);
 
         // get the latest camera transform      
-        tf_listener.waitForTransform("/camera_link", "/base_link", ros::Time::now() - delay, timeout);
-        tf_listener.lookupTransform("/map", "/camera_link", ros::Time::now() - delay, camera_transform);
-        transform_cloud(camera_transform);
+        tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
+        tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
+        // transform_cloud(camera_transform);
+        transform_from_quat(camera_transform);
         std::cout << "Cloud sent. " << std::endl;
     }
 

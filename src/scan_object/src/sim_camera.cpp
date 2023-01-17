@@ -54,7 +54,7 @@ void frameCallback(const ros::TimerEvent&)
 
     t.setOrigin(tf::Vector3(int_marker.pose.position.x, int_marker.pose.position.y, int_marker.pose.position.z));
     t.setRotation(tf::Quaternion(int_marker.pose.orientation.x, int_marker.pose.orientation.y, int_marker.pose.orientation.z, int_marker.pose.orientation.w));
-    br.sendTransform(tf::StampedTransform(t, time, "base_link", "camera_link"));
+    br.sendTransform(tf::StampedTransform(t, time, "map", "camera"));
 }
 
 void processFeedback( const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback )
@@ -84,7 +84,7 @@ void processFeedback( const visualization_msgs::InteractiveMarkerFeedbackConstPt
 void make6DofMarker()
 {
     InteractiveMarker int_marker;
-    int_marker.header.frame_id = "base_link";
+    int_marker.header.frame_id = "map";
     tf::Vector3 position = tf::Vector3(0, 0, 0);
     tf::pointTFToMsg(position, int_marker.pose.position);
     int_marker.scale = 0.2;
