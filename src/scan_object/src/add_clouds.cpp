@@ -12,12 +12,26 @@ void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
     pcl::PointCloud<pcl::PointXYZ> new_cloud;
     pcl::fromROSMsg(cloud_in, new_cloud);
 
-    // filter new_cloud as aggregating clouds tends to be expensive
-    // passthrough to the area of interest
-    // voxel downsampling
-
     // literally add lol
     cloud_out += new_cloud;
+
+    // filter aggregated cloud
+    /* Filters
+    Passthrough:
+         - reduce the search size to the region of interest
+         - ignore points in the far field with poorer accuracy
+    Voxel:
+         - downsample the number of points for processing
+         - averaging samples in space reduces noise
+         - average overlapping points from multiple scans
+         - voxel size should be close to the sensors resolution
+            so that precision is maintained but overlapping points
+            are averaged.
+    Outlier removal:
+         - radial outliers
+         - statistical outliers
+         - possible but maybe not necessary
+    */
 
     sensor_msgs::PointCloud2 ros_cloud;
     pcl::toROSMsg(cloud_out, ros_cloud);
