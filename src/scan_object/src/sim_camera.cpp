@@ -15,7 +15,7 @@ boost::shared_ptr<interactive_markers::InteractiveMarkerServer> server;
 interactive_markers::MenuHandler menu_handler;
 
 
-Marker makeBox( InteractiveMarker &msg )
+Marker makeArrow( InteractiveMarker &msg )
 {
     Marker marker;
 
@@ -35,7 +35,7 @@ InteractiveMarkerControl& makeBoxControl( InteractiveMarker &msg )
 {
     InteractiveMarkerControl control;
     control.always_visible = true;
-    control.markers.push_back( makeBox(msg) );
+    control.markers.push_back( makeArrow(msg) );
     msg.controls.push_back( control );
 
     return msg.controls.back();
@@ -43,14 +43,18 @@ InteractiveMarkerControl& makeBoxControl( InteractiveMarker &msg )
 
 void frameCallback(const ros::TimerEvent&)
 {
-    static tf::TransformBroadcaster br;
+    // take the current marker pose and publish it as the current camera postion
+    // this is a way to simulate the camera moving in order to test accumulating pointclouds
+    // timer calls this function every frame to update the transform
 
-    tf::Transform t;
-
-    ros::Time time = ros::Time::now();
-
+    // get the marker pose relative to map
     visualization_msgs::InteractiveMarker int_marker;
     server->get("simple_6dof", int_marker);
+    
+    // broadcast the transform
+    static tf::TransformBroadcaster br;
+    tf::Transform t;
+    ros::Time time = ros::Time::now();
 
     t.setOrigin(tf::Vector3(int_marker.pose.position.x, int_marker.pose.position.y, int_marker.pose.position.z));
     t.setRotation(tf::Quaternion(int_marker.pose.orientation.x, int_marker.pose.orientation.y, int_marker.pose.orientation.z, int_marker.pose.orientation.w));
@@ -92,15 +96,17 @@ void make6DofMarker()
     int_marker.name = "simple_6dof";
     int_marker.description = "camera";
 
-    // insert a box
+    // insert an arrow
     makeBoxControl(int_marker);
     unsigned int interaction_mode = visualization_msgs::InteractiveMarkerControl::MOVE_ROTATE_3D;
     int_marker.controls[0].interaction_mode = interaction_mode;
 
     InteractiveMarkerControl control;
 
+    // axis stay fixed with respect to the fixed frame
     control.orientation_mode = InteractiveMarkerControl::FIXED;
 
+    // create the controls for the marker
     control.orientation.w = 1;
     control.orientation.x = 1;
     control.orientation.y = 0;
@@ -147,10 +153,13 @@ int main(int argc, char** argv)
     // create a timer to update the published transforms
     ros::Timer frame_timer = n.createTimer(ros::Duration(0.01), frameCallback);
 
+    // create a marker server
     server.reset( new interactive_markers::InteractiveMarkerServer("camera_control","",false) );
 
+    // wait for server to init
     ros::Duration(0.1).sleep();
 
+    // create the interactive marker
     make6DofMarker();
 
     server->applyChanges();

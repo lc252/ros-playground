@@ -16,6 +16,7 @@ void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
     // passthrough to the area of interest
     // voxel downsampling
 
+    // literally add lol
     cloud_out += new_cloud;
 
     sensor_msgs::PointCloud2 ros_cloud;
