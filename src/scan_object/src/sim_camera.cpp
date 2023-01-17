@@ -61,36 +61,15 @@ void frameCallback(const ros::TimerEvent&)
     br.sendTransform(tf::StampedTransform(t, time, "map", "camera"));
 }
 
-void processFeedback( const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback )
-{
-    // output change to console
-    std::ostringstream s;
-    if( feedback->event_type == visualization_msgs::InteractiveMarkerFeedback::POSE_UPDATE)
-    {
-        ROS_INFO_STREAM( s.str() << ": pose changed"
-            << "\nposition = "
-            << feedback->pose.position.x
-            << ", " << feedback->pose.position.y
-            << ", " << feedback->pose.position.z
-            << "\norientation = "
-            << feedback->pose.orientation.w
-            << ", " << feedback->pose.orientation.x
-            << ", " << feedback->pose.orientation.y
-            << ", " << feedback->pose.orientation.z
-            << "\nframe: " << feedback->header.frame_id
-            << " time: " << feedback->header.stamp.sec << "sec, "
-            << feedback->header.stamp.nsec << " nsec" );
-    }
-
-    server->applyChanges();
-}
 
 void make6DofMarker()
 {
     InteractiveMarker int_marker;
     int_marker.header.frame_id = "map";
     tf::Vector3 position = tf::Vector3(0, 0, 0);
+    tf::Quaternion orientation = tf::Quaternion(0.0, 0.0, 0.0, 1.0);
     tf::pointTFToMsg(position, int_marker.pose.position);
+    tf::quaternionTFToMsg(orientation, int_marker.pose.orientation);
     int_marker.scale = 0.2;
 
     int_marker.name = "simple_6dof";
@@ -141,7 +120,6 @@ void make6DofMarker()
     int_marker.controls.push_back(control);
 
     server->insert(int_marker);
-    server->setCallback(int_marker.name, &processFeedback);
     menu_handler.apply( *server, int_marker.name );
 }
 
