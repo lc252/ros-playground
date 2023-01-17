@@ -28,7 +28,7 @@ void transform_cloud(tf::StampedTransform camera_transform)
     std::cout << "x: " << t.x() << " y: " << t.y() << " z: " << t.z() << std::endl;
     std::cout << "x: " << q.x() << " y: " << q.y() << " z: " << q.z() << " w: " << q.w() << std::endl;    
 
-    // init matrices compatible with pcl transforms
+    // create matrices compatible with pcl transforms
     Eigen::Quaternionf quat(q.w(), q.x(), q.y(), q.z());
     Eigen::Vector3f tran(t.x(), t.y(), t.z());
     Eigen::Matrix4f transformation_matrix = Eigen::Matrix4f::Identity();
@@ -48,11 +48,7 @@ void transform_cloud(tf::StampedTransform camera_transform)
     // insert rotation
     transformation_matrix.block<3,3>(0,0) = quat.toRotationMatrix();
     // insert translation
-    transformation_matrix.block<3,1>(0,3) = tran; // test this line works instead of the following 3 for simplicity
-    // transformation_matrix(0,3) = t[0];
-    // transformation_matrix(1,3) = t[1];
-    // transformation_matrix(2,3) = t[2];
-
+    transformation_matrix.block<3,1>(0,3) = tran;
     // execute transform
     pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
     pcl::transformPointCloud(input_cloud, transformed_cloud, transformation_matrix);
