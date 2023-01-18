@@ -6,6 +6,7 @@
 #include <tf/tf.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl/common/transforms.h>
+#include <std_msgs/Bool.h>
 
 
 pcl::PointCloud<pcl::PointXYZ> input_cloud;
@@ -60,6 +61,28 @@ void transform_cloud(tf::StampedTransform camera_transform)
     pub.publish(output_cloud);
 }
 
+void process_cb(const std_msgs::Bool msg)
+{
+    if(!msg.data)
+    {
+        return;
+    }
+
+    // setup camera transform listener
+    tf::TransformListener tf_listener;
+    tf::StampedTransform camera_transform;
+
+    ros::Duration timeout(1);
+    ros::Duration delay(0.1);
+
+    // get the latest camera transform      
+    tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
+    tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
+
+    // execute
+    transform_cloud(camera_transform);
+    std::cout << "Cloud sent. " << std::endl;
+}
 
 int main(int argc, char** argv)
 {
@@ -68,36 +91,14 @@ int main(int argc, char** argv)
 
     ros::Rate rate(30);
 
-    // setup cloud subscriber and publisher
-    ros::Subscriber sub = nh.subscribe("depth_points", 1, retrieve_cloud);
+    // setup cloud subscribers and publisher
+    ros::Subscriber cloud_sub = nh.subscribe("depth_points", 1, retrieve_cloud);
+    ros::Subscriber capture_sub = nh.subscribe("capture", 1, process_cb);
     pub = nh.advertise<sensor_msgs::PointCloud2>("transformed_cloud", 1);    // declared globally
 
-    // setup camera transform listener
-    tf::TransformListener tf_listener;
-    tf::StampedTransform camera_transform;
 
-    sensor_msgs::PointCloud2 cloud_out;
-
-    while(ros::ok())
-    {   
-        // wait for enter key
-        std::cout << "Enter to capture cloud. ";
-        std::cin.get();
-
-        ros::spinOnce();
+    ros::spin();
         
-        ros::Duration timeout(1);
-        ros::Duration delay(0.01);
-
-        // get the latest camera transform      
-        tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
-        tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
-        // transform_cloud(camera_transform);
-        transform_cloud(camera_transform);
-        std::cout << "Cloud sent. " << std::endl;
-    }
-
-    
     return 0;
 }
 
