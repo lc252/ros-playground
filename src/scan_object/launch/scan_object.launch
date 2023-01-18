@@ -15,4 +15,5 @@
 
     <node pkg="depth_camera" name="depth" type="depth_cloud">
     </node>
+    
 </launch>
