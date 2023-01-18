@@ -13,6 +13,9 @@
     <node pkg="scan_object" name="cloud_adder" type="add_clouds">
     </node>
 
+    <node pkg="scan_object" name="transformer" type="transform_cloud">
+    </node>
+
     <node pkg="depth_camera" name="depth" type="depth_cloud">
     </node>
     
