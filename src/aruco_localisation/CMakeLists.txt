@@ -10,7 +10,6 @@ project(aruco_localisation)
 find_package(catkin REQUIRED COMPONENTS
   aruco_detect
   fiducial_slam
-  fiducials
   roscpp
   rospy
 )

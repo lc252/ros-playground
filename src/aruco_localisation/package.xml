@@ -51,17 +51,14 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>aruco_detect</build_depend>
   <build_depend>fiducial_slam</build_depend>
-  <build_depend>fiducials</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_export_depend>aruco_detect</build_export_depend>
   <build_export_depend>fiducial_slam</build_export_depend>
-  <build_export_depend>fiducials</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <exec_depend>aruco_detect</exec_depend>
   <exec_depend>fiducial_slam</exec_depend>
-  <exec_depend>fiducials</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
 
