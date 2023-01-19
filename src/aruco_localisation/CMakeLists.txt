@@ -12,7 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   fiducial_slam
   roscpp
   rospy
+  tf
 )
+# find_package(Eigen REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,6 +110,7 @@ catkin_package(
 #  LIBRARIES aruco_localisation
 #  CATKIN_DEPENDS aruco_detect fiducial_slam fiducials roscpp rospy
 #  DEPENDS system_lib
+  # DEPENDS Eigen
 )
 
 ###########
@@ -119,6 +122,7 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  # ${Eigen_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -205,3 +209,6 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(reverse_aruco_tf src/reverse_aruco_tf.cpp)
+target_link_libraries(reverse_aruco_tf ${catkin_LIBRARIES} ${DEPENDENCIES} ${tf_LIBRARY}) # ${EIGEN_LIBRARIES}
