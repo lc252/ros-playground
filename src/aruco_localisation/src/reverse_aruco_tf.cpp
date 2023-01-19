@@ -69,7 +69,7 @@ void inverse_transform(fiducial_msgs::FiducialTransformArray msg)
         geometry_msgs::TransformStamped msg;
         msg.header.stamp = ros::Time::now();
         msg.header.frame_id = "aruco_" + std::to_string(inverse.fiducial_id);
-        msg.child_frame_id = "my_camera_frame";
+        msg.child_frame_id = "camera_link";
         // fill rotation values from Eigen
         std::cout << inv_quat.x() << inv_quat.y() << inv_quat.z() << inv_quat.w() << std::endl;
         msg.transform.rotation.x = inv_quat.x();
