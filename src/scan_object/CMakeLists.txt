@@ -214,7 +214,7 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(transform_cloud src/transform_cloud.cpp)
-target_link_libraries(transform_cloud ${catkin_LIBRARIES} ${DEPENDENCIES} ${tf_LIBRARY})
+target_link_libraries(transform_cloud ${catkin_LIBRARIES}) # ${DEPENDENCIES} ${tf_LIBRARY})
 add_executable(sim_camera src/sim_camera.cpp)
 target_link_libraries(sim_camera ${catkin_LIBRARIES})
 add_executable(add_clouds src/add_clouds.cpp)
