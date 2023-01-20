@@ -1,1 +1,8 @@
 <!-- call launch files from within this launch file, see answers.ros.org/question/9426/can-i-call-one-launch-file-from-another-launch-file/ -->
+
+<launch>
+    <include file="$(find aruco_localisation)/launch/aruco_detect.launch">
+    <include file="$(find aruco_localisation)/launch/rs_camera.launch">
+    <include file="$(find aruco_localisation)/launch/static_fiducial_tfs.launch">
+
+</launch>
