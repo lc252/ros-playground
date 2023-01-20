@@ -1,0 +1,20 @@
+<!-- launch the necessary static tfs between the fiducials and the world frame. bring a ruler tomorrow to measure -->
+<launch>
+
+    <node pkg="tf" name="map_to_226" type="static_transform_publisher"
+        args="0 0 0 0 0 0 map aruco_226 1">
+    </node>
+
+    <!-- <node pkg="tf" name="map_to_111" type="static_transform_publisher"
+        args="0 0 0 0 0 0 map aruco_111 1">
+    </node>
+
+    <node pkg="tf" name="map_to_26" type="static_transform_publisher"
+        args="0 0 0 0 0 0 map aruco_26 1">
+    </node>
+
+    <node pkg="tf" name="map_to_733" type="static_transform_publisher"
+        args="0 0 0 0 0 0 map aruco_733 1">
+    </node> -->
+
+</launch>
