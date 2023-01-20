@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   tf
   realsense2
+  OpenCV
 )
 
 ## System dependencies are found with CMake's conventions
@@ -216,3 +217,5 @@ add_executable(realsense_pcl src/realsense_pcl.cpp)
 target_link_libraries(realsense_pcl ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
 add_executable(depth_cloud src/depth_cloud.cpp)
 target_link_libraries(depth_cloud ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
+add_executable(rgb_stream src/rgb_stream.cpp)
+target_link_libraries(rgb_stream ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})

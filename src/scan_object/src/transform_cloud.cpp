@@ -32,7 +32,6 @@ void transform_cloud(tf::StampedTransform camera_transform)
     // create matrices compatible with pcl transforms
     Eigen::Quaternionf quat(q.w(), q.x(), q.y(), q.z());
     Eigen::Vector3f tran(t.x(), t.y(), t.z());
-    Eigen::Matrix4f transformation_matrix = Eigen::Matrix4f::Identity();
 
     // Build transformation matrix
     /* Description
@@ -46,10 +45,13 @@ void transform_cloud(tf::StampedTransform camera_transform)
     |   0   0   0   1 |
     */
 
+    // identity matrix
+    Eigen::Matrix4f transformation_matrix = Eigen::Matrix4f::Identity();
     // insert rotation
     transformation_matrix.block<3,3>(0,0) = quat.toRotationMatrix();
     // insert translation
     transformation_matrix.block<3,1>(0,3) = tran;
+    
     // execute transform
     pcl::PointCloud<pcl::PointXYZ> transformed_cloud;
     pcl::transformPointCloud(input_cloud, transformed_cloud, transformation_matrix);
@@ -76,8 +78,8 @@ void process_cb(const std_msgs::Bool msg)
     ros::Duration delay(0.1);
 
     // get the latest camera transform      
-    tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
-    tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
+    tf_listener.waitForTransform("/camera_depth_optical_frame", "/map", ros::Time::now() - delay, timeout);
+    tf_listener.lookupTransform("/map", "/camera_depth_optical_frame", ros::Time::now() - delay, camera_transform);
 
     // execute
     transform_cloud(camera_transform);
@@ -92,7 +94,7 @@ int main(int argc, char** argv)
     ros::Rate rate(30);
 
     // setup cloud subscribers and publisher
-    ros::Subscriber cloud_sub = nh.subscribe("depth_points", 1, retrieve_cloud);
+    ros::Subscriber cloud_sub = nh.subscribe("camera/depth/color/points", 1, retrieve_cloud);
     ros::Subscriber capture_sub = nh.subscribe("capture", 1, process_cb);
     pub = nh.advertise<sensor_msgs::PointCloud2>("transformed_cloud", 1);    // declared globally
 
