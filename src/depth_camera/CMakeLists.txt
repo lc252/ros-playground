@@ -15,7 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   tf
   realsense2
-  OpenCV
+  # OpenCV
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions

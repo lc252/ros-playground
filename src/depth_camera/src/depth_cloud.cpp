@@ -50,8 +50,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr PCL_Conversion(const rs2::points& points){
     return cloud;
 }
 
-
-
 int cloud_cb()
 {
     rs2::pointcloud pc;
@@ -71,7 +69,6 @@ int cloud_cb()
 
     return 0;
 }
-
 
 
 int main(int argc, char** argv)
