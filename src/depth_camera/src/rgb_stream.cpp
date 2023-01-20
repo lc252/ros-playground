@@ -7,7 +7,7 @@
 
 
 // Create a RealSense pipeline, which serves as the container for the processing blocks
-rs2::pipeline pipe;
+rs2::pipeline p;
 // Create a configuration for configuring the pipeline with a non default profile
 rs2::config cfg;
 
@@ -20,7 +20,7 @@ image_transport::Publisher pub = it.advertise("image", 1);
 void rgb_frame_cb()
 {
     // Wait for the next set of frames from the camera   
-    rs2::frameset frames = pipe.wait_for_frames();
+    rs2::frameset frames = p.wait_for_frames();
     // Get the color frame from the frameset
     rs2::frame color_frame = frames.get_color_frame();
     // Create a cv::Mat object from the color frame
@@ -40,7 +40,6 @@ void rgb_frame_cb()
 
 int main(int argc, char **argv)
 {
-    int count = 0;
     ros::init(argc, argv, "realsense_image_publisher");
     ros::Rate rate(30);
 
@@ -48,7 +47,7 @@ int main(int argc, char **argv)
     cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
 
     // Start the pipeline with the configuration
-    pipe.start(cfg);
+    p.start(cfg);
 
     while (ros::ok())
     {
