@@ -78,8 +78,8 @@ void process_cb(const std_msgs::Bool msg)
     ros::Duration delay(0.1);
 
     // get the latest camera transform      
-    tf_listener.waitForTransform("/camera", "/map", ros::Time::now() - delay, timeout);
-    tf_listener.lookupTransform("/map", "/camera", ros::Time::now() - delay, camera_transform);
+    tf_listener.waitForTransform("/camera_depth_optical_frame", "/map", ros::Time::now() - delay, timeout);
+    tf_listener.lookupTransform("/map", "/camera_depth_optical_frame", ros::Time::now() - delay, camera_transform);
 
     // execute
     transform_cloud(camera_transform);
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
     ros::Rate rate(30);
 
     // setup cloud subscribers and publisher
-    ros::Subscriber cloud_sub = nh.subscribe("depth_points", 1, retrieve_cloud);
+    ros::Subscriber cloud_sub = nh.subscribe("camera/depth/color/points", 1, retrieve_cloud);
     ros::Subscriber capture_sub = nh.subscribe("capture", 1, process_cb);
     pub = nh.advertise<sensor_msgs::PointCloud2>("transformed_cloud", 1);    // declared globally
 

@@ -58,7 +58,7 @@ void frameCallback(const ros::TimerEvent &)
 
     t.setOrigin(tf::Vector3(int_marker.pose.position.x, int_marker.pose.position.y, int_marker.pose.position.z));
     t.setRotation(tf::Quaternion(int_marker.pose.orientation.x, int_marker.pose.orientation.y, int_marker.pose.orientation.z, int_marker.pose.orientation.w));
-    br.sendTransform(tf::StampedTransform(t, time, "map", "camera"));
+    br.sendTransform(tf::StampedTransform(t, time, "map", "camera_link"));
 }
 
 void buttonFeedback(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
@@ -94,7 +94,7 @@ void make6DofMarker()
     int_marker.scale = 0.2;
 
     int_marker.name = "simple_6dof";
-    int_marker.description = "sim camera";
+    int_marker.description = "sim_camera";
 
     // insert an arrow
     makeBoxControl(int_marker);
