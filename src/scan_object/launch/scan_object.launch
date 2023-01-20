@@ -1,9 +1,9 @@
 <launch>
 
-    <node pkg="scan_object" name="sim_camera" type="sim_camera">
-    </node>
+    <!-- <node pkg="scan_object" name="sim_camera" type="sim_camera">
+    </node> -->
 
-    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/aggregate_cloud.rviz" required="true">
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true">
     </node>
 
     <node pkg="tf" name="map_to_base" type="static_transform_publisher"
@@ -16,7 +16,7 @@
     <node pkg="scan_object" name="transformer" type="transform_cloud">
     </node>
 
-    <include file="$(find aruco_localisation)/launch/rs_camera.launch"/>
+    <!-- <include file="$(find aruco_localisation)/launch/rs_camera.launch"/> -->
     <!-- <node pkg="depth_camera" name="depth" type="depth_cloud">
     </node> -->
     
