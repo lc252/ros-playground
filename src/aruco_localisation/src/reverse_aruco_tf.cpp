@@ -62,7 +62,6 @@ void inverse_transform(fiducial_msgs::FiducialTransformArray msg)
     tf_msg.header.frame_id = "aruco_" + std::to_string(best_tf.fiducial_id);
     tf_msg.child_frame_id = "camera_link";
     // fill rotation values from Eigen
-    std::cout << inv_quat.x() << inv_quat.y() << inv_quat.z() << inv_quat.w() << std::endl;
     tf_msg.transform.rotation.x = inv_quat.x();
     tf_msg.transform.rotation.y = inv_quat.y();
     tf_msg.transform.rotation.z = inv_quat.z();
