@@ -15,7 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   tf
   realsense2
-  OpenCV
+  # OpenCV
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -219,3 +220,5 @@ add_executable(depth_cloud src/depth_cloud.cpp)
 target_link_libraries(depth_cloud ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
 add_executable(rgb_stream src/rgb_stream.cpp)
 target_link_libraries(rgb_stream ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})
+add_executable(stream_camera src/stream_camera.cpp)
+target_link_libraries(stream_camera ${catkin_LIBRARIES} ${DEPENDENCIES} ${realsense2_LIBRARY})

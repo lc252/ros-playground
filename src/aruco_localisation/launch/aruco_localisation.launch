@@ -2,7 +2,7 @@
 
 <launch>
     <include file="$(find aruco_localisation)/launch/aruco_detect.launch"/>
-    <!-- <include file="$(find aruco_localisation)/launch/rs_camera.launch"/> -->
+    <include file="$(find aruco_localisation)/launch/rs_camera.launch"/>
     <include file="$(find aruco_localisation)/launch/static_fiducial_tfs.launch"/>
 
     <node pkg="aruco_localisation" name="aruco_tf" type="reverse_aruco_tf">

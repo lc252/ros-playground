@@ -1,7 +1,8 @@
-// Script for publishing colour mapped pointclouds from an intel realsense camera to a ROS topic
-// adapted from https://github.com/IntelRealSense/librealsense/blob/master/wrappers/pcl/pcl-color/rs-pcl-color.cpp
-
 #include <ros/ros.h>
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 #include <librealsense2/rs.hpp>
 #include <pcl/point_types.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -10,11 +11,13 @@
 
 
 
-ros::Publisher pub;
+// Create a RealSense pipeline, which serves as the container for the processing blocks
 rs2::pipeline p;
+// Create a configuration for configuring the pipeline with a non default profile
 rs2::config cfg;
 
-using pcl_ptr = pcl::PointCloud<pcl::PointXYZ>::Ptr;
+// image publisher
+ros::Publisher pub;
 
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr PCL_Conversion(const rs2::points& points){
@@ -71,25 +74,51 @@ int cloud_cb()
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "depth_cloud");
+    ros::init(argc, argv, "camera_stream");
     ros::NodeHandle nh;
-    ros::Rate rate(30);
+    //ros::Rate rate(30);
 
+
+    // Add desired streams to configuration
+    cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
+    cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
+
+    // image publisher
+    image_transport::ImageTransport it(nh);
+    image_transport::Publisher image_pub = it.advertise("image", 1);
+
+    // cloud publisher
     pub = nh.advertise<sensor_msgs::PointCloud2>("depth_points", 1);
 
-    // configure and start realsense pipeline
-    // 1280x720 produces more points but much slower
-    cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
+    // Start the pipeline with the configuration
     p.start(cfg);
 
-    
-    while(ros::ok())
+    while (ros::ok())
     {
+        // RGB
+        // Wait for the next set of frames from the camera   
+        rs2::frameset frames = p.wait_for_frames();
+        // Get the color frame from the frameset
+        rs2::frame color_frame = frames.get_color_frame();
+        // Create a cv::Mat object from the color frame
+        cv::Mat image = cv::Mat(cv::Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), cv::Mat::AUTO_STEP);
+
+        // Convert the cv::Mat object to a sensor_msgs/Image message
+        cv_bridge::CvImage cv_im;
+
+        cv_im.encoding = "bgr8"; // breaks
+        cv_im.image = image;
+        sensor_msgs::ImagePtr msg = cv_im.toImageMsg();
+
+        // Publish the message
+        image_pub.publish(msg);
+
         cloud_cb();
+
         ros::spinOnce();
-        rate.sleep();
+        //rate.sleep();
     }
 
     return 0;
