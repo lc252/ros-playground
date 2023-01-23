@@ -211,4 +211,4 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(reverse_aruco_tf src/reverse_aruco_tf.cpp)
-target_link_libraries(reverse_aruco_tf ${catkin_LIBRARIES} ${DEPENDENCIES} ${tf_LIBRARY}) # ${EIGEN_LIBRARIES}
+target_link_libraries(reverse_aruco_tf ${catkin_LIBRARIES}) # ${DEPENDENCIES} ${tf_LIBRARY}) # ${EIGEN_LIBRARIES}
