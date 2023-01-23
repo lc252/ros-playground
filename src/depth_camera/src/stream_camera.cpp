@@ -53,8 +53,26 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr PCL_Conversion(const rs2::points& points){
     return cloud;
 }
 
-int cloud_cb()
+int publish_callback()
 {
+    // RGB
+    // Wait for the next set of frames from the camera   
+    rs2::frameset frames = p.wait_for_frames();
+    // Get the color frame from the frameset
+    rs2::frame color_frame = frames.get_color_frame();
+    // Create a cv::Mat object from the color frame
+    cv::Mat image = cv::Mat(cv::Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), cv::Mat::AUTO_STEP);
+
+    // Convert the cv::Mat object to a sensor_msgs/Image message
+    cv_bridge::CvImage cv_im;
+
+    cv_im.encoding = "bgr8"; // breaks
+    cv_im.image = image;
+    sensor_msgs::ImagePtr msg = cv_im.toImageMsg();
+
+    // Publish the message
+    image_pub.publish(msg);
+
     rs2::pointcloud pc;
     rs2::points points;
 
@@ -85,10 +103,6 @@ int main(int argc, char **argv)
     cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
     cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
 
-    // image publisher
-    image_transport::ImageTransport it(nh);
-    image_transport::Publisher image_pub = it.advertise("image", 1);
-
     // cloud publisher
     pub = nh.advertise<sensor_msgs::PointCloud2>("depth_points", 1);
 
@@ -97,25 +111,7 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-        // RGB
-        // Wait for the next set of frames from the camera   
-        rs2::frameset frames = p.wait_for_frames();
-        // Get the color frame from the frameset
-        rs2::frame color_frame = frames.get_color_frame();
-        // Create a cv::Mat object from the color frame
-        cv::Mat image = cv::Mat(cv::Size(640, 480), CV_8UC3, (void*)color_frame.get_data(), cv::Mat::AUTO_STEP);
-
-        // Convert the cv::Mat object to a sensor_msgs/Image message
-        cv_bridge::CvImage cv_im;
-
-        cv_im.encoding = "bgr8"; // breaks
-        cv_im.image = image;
-        sensor_msgs::ImagePtr msg = cv_im.toImageMsg();
-
-        // Publish the message
-        image_pub.publish(msg);
-
-        cloud_cb();
+        publish_callback();
 
         ros::spinOnce();
         //rate.sleep();

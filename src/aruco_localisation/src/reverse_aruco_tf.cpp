@@ -21,7 +21,7 @@ void inverse_transform(fiducial_msgs::FiducialTransformArray msg)
     best_tf.image_error = 999;
     for(fiducial_msgs::FiducialTransform transform : msg.transforms)
     {
-        if(transform.fiducial_id == 226)// transform.image_error < best_tf.image_error)
+        if(transform.image_error < best_tf.image_error)
         {
             best_tf = transform;
         }
