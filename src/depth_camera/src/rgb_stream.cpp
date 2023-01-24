@@ -11,10 +11,7 @@ rs2::pipeline p;
 // Create a configuration for configuring the pipeline with a non default profile
 rs2::config cfg;
 
-// image publisher
-ros::NodeHandle nh;
-image_transport::ImageTransport it(nh);
-image_transport::Publisher pub = it.advertise("image", 1);
+image_transport::Publisher pub;
 
 
 void rgb_frame_cb()
@@ -41,19 +38,24 @@ void rgb_frame_cb()
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "realsense_image_publisher");
-    ros::Rate rate(30);
+    ros::NodeHandle nh;
+    // ros::Rate rate(30);
 
     // Add desired streams to configuration
-    cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
+    cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8);
 
     // Start the pipeline with the configuration
     p.start(cfg);
+
+    // image publisher
+    image_transport::ImageTransport it(nh);
+    pub = it.advertise("image", 1);
 
     while (ros::ok())
     {
         rgb_frame_cb();
         ros::spinOnce();
-        rate.sleep();
+        // rate.sleep();
     }
 
     return 0;
