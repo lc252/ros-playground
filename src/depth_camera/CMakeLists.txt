@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   tf
   realsense2
+  camera_info_manager
   # OpenCV
   cv_bridge
 )
