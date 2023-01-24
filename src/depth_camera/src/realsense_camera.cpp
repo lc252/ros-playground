@@ -25,7 +25,7 @@ public:
     RealSense_Camera()
     {
         // constructor configures streams, starts the pipeline and
-        // publishes the static transforms
+        // publishes the static tr    ansforms
 
         // setup streams
         cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8);
@@ -156,9 +156,8 @@ private:
         tf.transform.translation.x = ext.translation[0];
         tf.transform.translation.y = ext.translation[1];
         tf.transform.translation.z = ext.translation[2];
-        
+    
         br.sendTransform(tf);
-
     }
 
 };
@@ -206,6 +205,11 @@ int main(int argc, char **argv)
     info.height = 480;
     info.width = 640;
     info.distortion_model = "plumb_bob";
+    info.D = {0.0, 0.0, 0.0, 0.0, 0.0};
+    info.K = {923.98388671875, 0.0, 647.1097412109375, 0.0, 924.1301879882812, 369.11614990234375, 0.0, 0.0, 1.0};
+    info.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+    info.P = {923.98388671875, 0.0, 647.1097412109375, 0.0, 0.0, 924.1301879882812, 369.11614990234375, 0.0, 0.0, 0.0, 1.0, 0.0};
+
 
     // init camera
     RealSense_Camera cam;
