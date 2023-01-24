@@ -40,6 +40,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr PCL_Conversion(const rs2::points& points){
     for (int i = 0; i < points.size(); i++)
     {   
         // map xyz, alter to fit with the world xyz frame
+        // if you look in source code  of realsense they do this exactly, so I am undoing it. WHY?
         cloud->points[i].x = Vertex[i].z;
         cloud->points[i].y = -Vertex[i].x;
         cloud->points[i].z = -Vertex[i].y;
