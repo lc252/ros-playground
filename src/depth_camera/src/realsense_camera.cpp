@@ -148,7 +148,7 @@ private:
         Eigen::Quaternionf q(m);
 
         geometry_msgs::TransformStamped tf;
-        tf.header.frame_id = "depth_frame";
+        tf.header.frame_id = "camera_link";
         tf.child_frame_id = "color_frame";
         tf.transform.rotation.x = q.x();
         tf.transform.rotation.y = q.y();
