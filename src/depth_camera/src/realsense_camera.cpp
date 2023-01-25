@@ -59,6 +59,7 @@ public:
         cv_im.encoding = "bgr8"; // breaks
         cv_im.image = mat;
         sensor_msgs::ImagePtr ros_image = cv_im.toImageMsg();
+        ros_image->header.stamp = ros::Time::now();
         return ros_image;
     }
 
@@ -174,33 +175,11 @@ int main(int argc, char **argv)
     image_transport::ImageTransport it(nh);
     image_transport::Publisher im_pub = it.advertise("camera/image", 1);
     // camera info publisher
-    ros::Publisher info_pub = nh.advertise<sensor_msgs::CameraInfo>("camera/info", 1);
+    ros::Publisher info_pub = nh.advertise<sensor_msgs::CameraInfo>("camera/camera_info", 1);
     camera_info_manager::CameraInfoManager info_manager(nh, "realsense");
     // camera info should not change, only get once
     sensor_msgs::CameraInfo info;
-    /*
-    header: 
-    seq: 354
-    stamp: 
-        secs: 1674540313
-        nsecs: 185359955
-    frame_id: "camera_color_optical_frame"
-    height: 720
-    width: 1280
-    distortion_model: "plumb_bob"
-    D: [0.0, 0.0, 0.0, 0.0, 0.0]
-    K: [923.98388671875, 0.0, 647.1097412109375, 0.0, 924.1301879882812, 369.11614990234375, 0.0, 0.0, 1.0]
-    R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
-    P: [923.98388671875, 0.0, 647.1097412109375, 0.0, 0.0, 924.1301879882812, 369.11614990234375, 0.0, 0.0, 0.0, 1.0, 0.0]
-    binning_x: 0
-    binning_y: 0
-    roi: 
-    x_offset: 0
-    y_offset: 0
-    height: 0
-    width: 0
-    do_rectify: False
-    */
+
     info.header.frame_id = "color_frame";
     info.height = 480;
     info.width = 640;
