@@ -73,7 +73,7 @@ void aggregate_cloud(sensor_msgs::PointCloud2 cloud_in)
 
     sensor_msgs::PointCloud2 ros_cloud_map;
     pcl::toROSMsg(*cloud_map, ros_cloud_map);
-    ros_cloud_map.header.frame_id = "point_map";
+    ros_cloud_map.header.frame_id = "map";
     pub.publish(ros_cloud_map);
 }
 
