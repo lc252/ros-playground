@@ -1,13 +1,13 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 0
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
         - /Status1
       Splitter Ratio: 0.5
-    Tree Height: 514
+    Tree Height: 592
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -54,24 +54,6 @@ Visualization Manager:
       Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 1
-      Class: rviz/Axes
-      Enabled: false
-      Length: 0.5
-      Name: Origin
-      Radius: 0.019999999552965164
-      Reference Frame: <Fixed Frame>
-      Show Trail: false
-      Value: false
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
-      Enabled: false
-      Name: SimulatedCamera
-      Show Axes: false
-      Show Descriptions: true
-      Show Visual Aids: false
-      Update Topic: /camera_control/update
-      Value: false
-    - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
         Max Value: 10
@@ -81,9 +63,9 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: RGB8
+      Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -94,11 +76,11 @@ Visualization Manager:
       Size (Pixels): 1
       Size (m): 0.009999999776482582
       Style: Points
-      Topic: /camera/depth/color/points
+      Topic: /camera/depth
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -167,6 +149,63 @@ Visualization Manager:
       Transport Hint: raw
       Unreliable: false
       Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        aruco_111:
+          Value: false
+        aruco_226:
+          Value: false
+        aruco_26:
+          Value: false
+        aruco_733:
+          Value: false
+        camera_link:
+          Value: true
+        color_optical:
+          Value: false
+        depth_optical:
+          Value: false
+        fiducial_111:
+          Value: false
+        fiducial_226:
+          Value: false
+        fiducial_26:
+          Value: false
+        fiducial_733:
+          Value: false
+        map:
+          Value: true
+      Marker Alpha: 1
+      Marker Scale: 0.5
+      Name: TF
+      Show Arrows: false
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          aruco_111:
+            camera_link:
+              depth_optical:
+                color_optical:
+                  fiducial_111:
+                    {}
+                  fiducial_226:
+                    {}
+                  fiducial_26:
+                    {}
+                  fiducial_733:
+                    {}
+          aruco_226:
+            {}
+          aruco_26:
+            {}
+          aruco_733:
+            {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -195,7 +234,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.986557006835938
+      Distance: 1.4731943607330322
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -211,9 +250,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6847974061965942
+      Pitch: 0.949796199798584
       Target Frame: <Fixed Frame>
-      Yaw: 5.125391006469727
+      Yaw: 2.2903966903686523
     Saved:
       - Class: rviz/Orbit
         Distance: 1.9956445693969727
