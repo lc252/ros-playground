@@ -5,12 +5,12 @@
 
     <!-- top left -->
     <node pkg="tf" name="map_to_aruco_26" type="static_transform_publisher"
-        args="0.044 0.044 0 0 0 0 map aruco_26 1">
+        args="0.044 -0.044 0 0 0 0 map aruco_26 1">
     </node>
 
     <!-- top right -->
     <node pkg="tf" name="map_to_aruco_111" type="static_transform_publisher"
-        args="0.166 0.044 0 0 0 0 map aruco_111 1">
+        args="0.166 -0.044 0 0 0 0 map aruco_111 1">
     </node>
 
     <!-- bottom left -->
