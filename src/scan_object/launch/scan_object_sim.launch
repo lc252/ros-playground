@@ -3,7 +3,7 @@
     <node pkg="scan_object" name="sim_camera" type="sim_camera">
     </node>
 
-    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true">
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object_sim.rviz" required="true">
     </node>
 
     <node pkg="tf" name="map_to_base" type="static_transform_publisher"
