@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1/Status1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 355
   - Class: rviz/Selection
@@ -91,11 +93,62 @@ Visualization Manager:
       Transport Hint: raw
       Unreliable: false
       Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        aruco_111:
+          Value: true
+        aruco_226:
+          Value: true
+        aruco_26:
+          Value: true
+        aruco_733:
+          Value: true
+        camera_link:
+          Value: true
+        color_frame:
+          Value: false
+        fiducial_111:
+          Value: false
+        fiducial_226:
+          Value: false
+        fiducial_26:
+          Value: false
+        fiducial_733:
+          Value: false
+      Marker Alpha: 1
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        aruco_111:
+          {}
+        aruco_226:
+          {}
+        aruco_26:
+          camera_link:
+            color_frame:
+              fiducial_111:
+                {}
+              fiducial_226:
+                {}
+              fiducial_26:
+                {}
+              fiducial_733:
+                {}
+        aruco_733:
+          {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: map
+    Fixed Frame: camera_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -119,7 +172,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.269658088684082
+      Distance: 1.97486412525177
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -135,9 +188,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5353981852531433
+      Pitch: 0.7453979253768921
       Target Frame: <Fixed Frame>
-      Yaw: 1.1403982639312744
+      Yaw: 3.135399341583252
     Saved: ~
 Window Geometry:
   Displays:
@@ -157,5 +210,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 72
-  Y: 27
+  X: 552
+  Y: 117
