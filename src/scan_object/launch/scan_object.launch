@@ -1,0 +1,17 @@
+<launch>
+
+    <!-- run camera -->
+    <node pkg="depth_camera" name="camera_stream" type="realsense_camera"></node>
+
+    <!-- launch files for localising the camera with aruco markers -->
+    <include file="$(find aruco_localisation)/launch/aruco_detect.launch"/>
+    <include file="$(find aruco_localisation)/launch/static_fiducial_tfs.launch"/>
+
+    <!-- create point maps -->
+    <node pkg="scan_object" name="transformer" type="transform_cloud"></node>
+    <node pkg="scan_object" name="cloud_adder" type="add_clouds"></node>
+
+    <!-- visualise results -->
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true"></node>
+    
+</launch>
