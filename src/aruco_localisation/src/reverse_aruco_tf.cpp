@@ -26,6 +26,10 @@ void inverse_transform(fiducial_msgs::FiducialTransformArray msg)
             best_tf = transform;
         }
     }
+    if(best_tf.fiducial_id == 0)
+    {
+        return;
+    }
 
     // extract quaternion and translation vector from the received fiducial_msgs::Fiducialransform
     Eigen::Quaternionf quat(
