@@ -193,6 +193,7 @@ int main(int argc, char **argv)
     info.height = 480;
     info.width = 640;
     info.distortion_model = "plumb_bob";
+    // these values are specific to a resolution of 640*480
     info.D = {0.0, 0.0, 0.0, 0.0, 0.0};
     info.K = {615.9893188476562, 0.0, 324.7398376464844, 0.0, 616.0867919921875, 246.0774383544922, 0.0, 0.0, 1.0};
     info.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
