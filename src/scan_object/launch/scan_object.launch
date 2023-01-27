@@ -16,6 +16,6 @@
     <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true"></node>
 
     <!-- create octomap -->
-    <include file="$(find my_octomap_server)/launch/octomap_mapping.launch"/>
+    <!-- <include file="$(find my_octomap_server)/launch/octomap_mapping.launch"/> -->
     
 </launch>
