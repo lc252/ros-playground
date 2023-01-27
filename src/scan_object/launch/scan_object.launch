@@ -1,23 +1,21 @@
 <launch>
 
-    <!-- <node pkg="scan_object" name="sim_camera" type="sim_camera">
-    </node> -->
+    <!-- run camera -->
+    <node pkg="depth_camera" name="camera_stream" type="realsense_camera"></node>
 
-    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true">
-    </node>
+    <!-- launch files for localising the camera with aruco markers -->
+    <include file="$(find aruco_localisation)/launch/aruco_detect.launch"/>
+    <include file="$(find aruco_localisation)/launch/static_fiducial_tfs.launch"/>
+    <node pkg="aruco_localisation" name="aruco_tf" type="reverse_aruco_tf"></node>
 
-    <node pkg="tf" name="map_to_base" type="static_transform_publisher"
-        args="0 0 0 0 0 0 map point_map 100">
-    </node>
+    <!-- create point maps -->
+    <node pkg="scan_object" name="transformer" type="transform_cloud"></node>
+    <node pkg="scan_object" name="cloud_adder" type="add_clouds"></node>
 
-    <node pkg="scan_object" name="cloud_adder" type="add_clouds">
-    </node>
+    <!-- visualise results -->
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find scan_object)/rviz_settings/scan_object.rviz" required="true"></node>
 
-    <node pkg="scan_object" name="transformer" type="transform_cloud">
-    </node>
-
-    <!-- <include file="$(find aruco_localisation)/launch/rs_camera.launch"/> -->
-    <!-- <node pkg="depth_camera" name="depth" type="depth_cloud">
-    </node> -->
+    <!-- create octomap -->
+    <include file="$(find my_octomap_server)/launch/octomap_mapping.launch"/>
     
 </launch>
