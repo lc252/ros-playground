@@ -17,15 +17,15 @@
 		<param name="sensor_model/max_range" value="1.0" />
 
 		<!-- hit and miss probabilities for updating a cell, hit >= miss -->
-		<param name="sensor_model/hit" value="0.9"/>
-		<param name="sensor_model/miss" value="0.1"/>
+		<param name="sensor_model/hit" value="0.7"/>
+		<param name="sensor_model/miss" value="0.4"/>
 
 		<!-- minimum and maximum clamping probabilites -->
 		<param name="sensor_model/max" value="0.97"/>
 		<param name="sensor_model/min" value="0.12"/>
 		
 		<!-- data source to integrate (PointCloud2) -->
-		<remap from="cloud_in" to="voxel_cloud" />
+		<remap from="cloud_in" to="camera/depth" />
 	
 	</node>
 </launch>
