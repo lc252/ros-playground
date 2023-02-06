@@ -14,6 +14,8 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <ros/ros.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
 
 
 // Types
@@ -53,7 +55,7 @@ int main(int argc, char** argv)
     // Estimate normals for scene
     pcl::console::print_highlight("Estimating scene normals...\n");
     pcl::NormalEstimationOMP<PointNT, PointNT> nest;
-    nest.setRadiusSearch(0.01);
+    nest.setRadiusSearch(0.005);
     nest.setInputCloud(scene);
     nest.compute(*scene);
 
@@ -78,7 +80,7 @@ int main(int argc, char** argv)
     align.setMaximumIterations(50000);               // Number of RANSAC iterations
     align.setNumberOfSamples(3);                     // Number of points to sample for generating/prerejecting a pose
     align.setCorrespondenceRandomness(5);            // Number of nearest features to use
-    align.setSimilarityThreshold(0.9f);              // Polygonal edge length similarity threshold
+    align.setSimilarityThreshold(0.95f);              // Polygonal edge length similarity threshold
     align.setMaxCorrespondenceDistance(2.5f * leaf); // Inlier threshold
     align.setInlierFraction(0.25f);                  // Required inlier fraction for accepting a pose hypothesis
     {
@@ -86,24 +88,52 @@ int main(int argc, char** argv)
         align.align(*object_aligned);
     }
 
-    if (align.hasConverged())
+
+    // Print results
+    printf("\n");
+    Eigen::Matrix4f transformation = align.getFinalTransformation();
+    pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", transformation(0, 0), transformation(0, 1), transformation(0, 2));
+    pcl::console::print_info("R = | %6.3f %6.3f %6.3f | \n", transformation(1, 0), transformation(1, 1), transformation(1, 2));
+    pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", transformation(2, 0), transformation(2, 1), transformation(2, 2));
+    pcl::console::print_info("\n");
+    pcl::console::print_info("t = < %0.3f, %0.3f, %0.3f >\n", transformation(0, 3), transformation(1, 3), transformation(2, 3));
+    pcl::console::print_info("\n");
+    pcl::console::print_info("Inliers: %i/%i\n", align.getInliers().size(), object->size());
+
+    //     |  0.005 -0.700 -0.714 | 
+    // R = | -0.991 -0.101  0.092 | 
+    //     | -0.136  0.707 -0.694 | 
+
+    // t = < -0.499, 0.108, 0.290 >
+
+    // the object transformed
+    PointCloudT::Ptr tf_object(new PointCloudT);
+    // execte transform
+    pcl::transformPointCloud(*object, *tf_object, transformation);
+
+    sensor_msgs::PointCloud2 ros_object, ros_scene, ros_tf_object;
+    pcl::toROSMsg(*object, ros_object);
+    ros_object.header.frame_id = "map";
+    pcl::toROSMsg(*scene, ros_scene);
+    ros_scene.header.frame_id = "map";
+    pcl::toROSMsg(*tf_object, ros_tf_object);
+    ros_tf_object.header.frame_id = "map";
+
+    ros::NodeHandle nh;
+    ros::Publisher object_pub = nh.advertise<sensor_msgs::PointCloud2>("object", 1);
+    ros::Publisher scene_pub = nh.advertise<sensor_msgs::PointCloud2>("scene", 1);
+    ros::Publisher tf_object_pub = nh.advertise<sensor_msgs::PointCloud2>("tf_object", 1);
+
+    ros::Rate r(1);
+
+    while (ros::ok())
     {
-        // Print results
-        printf("\n");
-        Eigen::Matrix4f transformation = align.getFinalTransformation();
-        pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", transformation(0, 0), transformation(0, 1), transformation(0, 2));
-        pcl::console::print_info("R = | %6.3f %6.3f %6.3f | \n", transformation(1, 0), transformation(1, 1), transformation(1, 2));
-        pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", transformation(2, 0), transformation(2, 1), transformation(2, 2));
-        pcl::console::print_info("\n");
-        pcl::console::print_info("t = < %0.3f, %0.3f, %0.3f >\n", transformation(0, 3), transformation(1, 3), transformation(2, 3));
-        pcl::console::print_info("\n");
-        pcl::console::print_info("Inliers: %i/%i\n", align.getInliers().size(), object->size());
+        object_pub.publish(ros_object);
+        scene_pub.publish(ros_scene);
+        tf_object_pub.publish(ros_tf_object);
+        r.sleep();
+        ros::spinOnce();
     }
-    else
-    {
-        pcl::console::print_error("Alignment failed!\n");
-        return (1);
-    }
-    ros::spin();
+
     return (0);
 }
