@@ -98,18 +98,12 @@ int main(int argc, char** argv)
         pcl::console::print_info("t = < %0.3f, %0.3f, %0.3f >\n", transformation(0, 3), transformation(1, 3), transformation(2, 3));
         pcl::console::print_info("\n");
         pcl::console::print_info("Inliers: %i/%i\n", align.getInliers().size(), object->size());
-
-        // Show alignment
-        pcl::visualization::PCLVisualizer visu("Alignment");
-        visu.addPointCloud(scene, ColorHandlerT(scene, 0.0, 255.0, 0.0), "scene");
-        visu.addPointCloud(object_aligned, ColorHandlerT(object_aligned, 0.0, 0.0, 255.0), "object_aligned");
-        visu.spin();
     }
     else
     {
         pcl::console::print_error("Alignment failed!\n");
         return (1);
     }
-
+    ros::spin();
     return (0);
 }
