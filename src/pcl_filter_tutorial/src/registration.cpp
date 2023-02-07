@@ -9,6 +9,7 @@
 #include <pcl/filters/filter.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/obj_io.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/sample_consensus_prerejective.h>
 #include <pcl/segmentation/sac_segmentation.h>
@@ -39,7 +40,8 @@ int main(int argc, char** argv)
 
     // Load object and scene
     pcl::console::print_highlight("Loading point clouds...\n");
-    pcl::io::loadPCDFile<PointNT>("/home/fif/lc252/srs-digital-twins/src/pcl_gen/pcd_files/chef.pcd", *object);
+    pcl::io::loadOBJFile<PointNT>("/home/fif/lc252/srs-digital-twins/src/pcl_filter_tutorial/obj_files/chef.obj", *object);
+    //pcl::io::loadPCDFile<PointNT>("/home/fif/lc252/srs-digital-twins/src/pcl_gen/pcd_files/chef.pcd", *object);
     pcl::io::loadPCDFile<PointNT>("/home/fif/lc252/srs-digital-twins/src/pcl_gen/pcd_files/rs1.pcd", *scene);
 
     // Downsample
@@ -52,10 +54,12 @@ int main(int argc, char** argv)
     grid.setInputCloud(scene);
     grid.filter(*scene);
 
-    // Estimate normals for scene
-    pcl::console::print_highlight("Estimating scene normals...\n");
+    // Estimate normals for object and scene
+    pcl::console::print_highlight("Estimating object and scene normals...\n");
     pcl::NormalEstimationOMP<PointNT, PointNT> nest;
-    nest.setRadiusSearch(0.005);
+    nest.setRadiusSearch(0.01);
+    nest.setInputCloud(object);
+    nest.compute(*object);
     nest.setInputCloud(scene);
     nest.compute(*scene);
 
