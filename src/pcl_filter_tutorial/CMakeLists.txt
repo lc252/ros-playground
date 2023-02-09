@@ -207,10 +207,10 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(voxel_example src/voxel_example.cpp)
-target_link_libraries(voxel_example ${catkin_LIBRARIES})
-add_executable(passthrough_example src/passthrough_example.cpp)
-target_link_libraries(passthrough_example ${catkin_LIBRARIES})
+# add_executable(voxel_example src/voxel_example.cpp)
+# target_link_libraries(voxel_example ${catkin_LIBRARIES})
+# add_executable(passthrough_example src/passthrough_example.cpp)
+# target_link_libraries(passthrough_example ${catkin_LIBRARIES})
 add_executable(segmentation src/segmentation.cpp)
 target_link_libraries(segmentation ${catkin_LIBRARIES})
 add_executable(smoothing src/smoothing.cpp)
