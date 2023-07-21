@@ -8,7 +8,7 @@ import numpy as np
 
 
 
-class fake_aruco():
+class fake_imu():
     def __init__(self):
         self.imu_pub = rospy.Publisher("imu", Imu, queue_size=1)
         self.timer = rospy.Timer(rospy.Duration(1), self.publish_imu)
@@ -29,6 +29,6 @@ class fake_aruco():
 
 if __name__ == "__main__":
     rospy.init_node("fake_aruco_publisher")
-    n = fake_aruco()
+    n = fake_imu()
     while not rospy.is_shutdown():
         rospy.spin()
