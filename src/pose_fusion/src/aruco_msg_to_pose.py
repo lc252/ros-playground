@@ -11,6 +11,14 @@ class converter():
     def __init__(self):
         self.ftf_sub = rospy.Subscriber("fiducial_transforms", FiducialTransformArray, self.conversion_cb)
         self.pose_pub = rospy.Publisher(f"pose/1", PoseWithCovarianceStamped, queue_size=1)
+        self.seq = 0
+        self.cov = [
+            0.005, 0, 0, 0, 0, 0,
+            0, 0.005, 0, 0, 0, 0,
+            0, 0, 0.005, 0, 0, 0,
+            0, 0, 0, 0.001, 0, 0,
+            0, 0, 0, 0, 0.001, 0,
+            0, 0, 0, 0, 0, 0.001]
 
     def conversion_cb(self, ftf_arr : FiducialTransformArray):
         # type annotation, ftf must be a FiducialTransform
@@ -21,7 +29,8 @@ class converter():
             # convert message
             pose = PoseWithCovarianceStamped()
             pose.header.stamp = ftf_arr.header.stamp
-            pose.header.frame_id = "camera_color_optical_frame"
+            pose.header.frame_id = "base_link"
+            pose.header.seq = self.seq
             # inverse tf
             q = ftf.transform.rotation
             q.w = -q.w
@@ -32,8 +41,11 @@ class converter():
             # store in new msg
             pose.pose.pose.position = t
             pose.pose.pose.orientation = q
+            pose.pose.covariance = self.cov
             # publish
             self.pose_pub.publish(pose)
+            # update seq
+            self.seq += 1
 
 
 
