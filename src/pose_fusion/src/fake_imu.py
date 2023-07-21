@@ -19,7 +19,7 @@ class fake_imu():
         ori_cov = np.random.rand(9) * 0.01
         ang = np.random.rand(3) * 0.01
         ang_cov = np.random.rand(9) * 0.01
-        lin = np.random.rand(3) * 0.01
+        lin = np.array([0,0,-9.81]) + np.random.rand(3) * 0.001
         lin_cov = np.random.rand(9) * 0.01
         header = Header(0, rospy.Time.now(), "imu_frame")
         imu = Imu(header, ori, ori_cov, Vector3(*ang), ang_cov, Vector3(*lin), lin_cov)
