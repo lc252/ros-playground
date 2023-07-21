@@ -10,7 +10,7 @@ pose0_config: [true,  true,  true,
                false, false, false,
                false, false, false,
                false, false, false]
-pose0_differential: true
+pose0_differential: false
 pose0_relative: false
 pose0_queue_size: 5
 pose0_nodelay: false
@@ -21,7 +21,7 @@ pose1_config: [true,  true,  true,
                false, false, false,
                false, false, false,
                false, false, false]
-pose1_differential: true
+pose1_differential: false
 pose1_relative: false
 pose1_queue_size: 5
 pose1_nodelay: false
@@ -32,7 +32,7 @@ pose2_config: [true,  true,  true,
                false, false, false,
                false, false, false,
                false, false, false]
-pose2_differential: true
+pose2_differential: false
 pose2_relative: false
 pose2_queue_size: 5
 pose2_nodelay: false
@@ -43,13 +43,13 @@ pose3_config: [true,  true,  true,
                false, false, false,
                false, false, false,
                false, false, false]
-pose3_differential: true
+pose3_differential: false
 pose3_relative: false
 pose3_queue_size: 5
 pose3_nodelay: false
 
 # IMU
-imu0: example/imu
+imu0: /imu
 imu0_config: [false, false, false,
               true,  true,  true,
               false, false, false,
