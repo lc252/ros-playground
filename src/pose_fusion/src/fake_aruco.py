@@ -3,6 +3,7 @@
 import rospy
 from fiducial_msgs.msg import FiducialTransformArray, FiducialTransform
 from geometry_msgs.msg import Transform, Vector3, Quaternion
+from tf import TransformBroadcaster, transformations
 import numpy as np
 
 
@@ -10,6 +11,7 @@ import numpy as np
 class fake_aruco():
     def __init__(self):
         self.ftf_pub = rospy.Publisher("fiducial_transforms", FiducialTransformArray, queue_size=1)
+        self.tf_broadcaster = TransformBroadcaster()
         self.timer = rospy.Timer(rospy.Duration(1), self.publish_ftf)
 
     def publish_ftf(self, msg):
@@ -18,11 +20,12 @@ class fake_aruco():
         ftf_array.header.frame_id = "camera_color_optical_frame"
         ftf_array.header.stamp = rospy.Time.now()
         for id in range(1,5):
-            rand_v3 = np.random.rand(3) * 0.1
-            rand_q = np.random.rand(4) * 0.1
+            rand_v3 = np.array([1,1,1]) + (np.random.rand(3) - 0.5) * 0.1    # uniform random in range 0 +/- 0.05
+            rand_q = transformations.quaternion_from_euler(*((transformations.random_vector(3) - 0.5) * 0.025), 'ryxz')
             tf = Transform(Vector3(*rand_v3), Quaternion(*rand_q))
             ftf = FiducialTransform(id, tf, 0, 0, 0)
             ftf_array.transforms.append(ftf)
+            self.tf_broadcaster.sendTransform(rand_v3, rand_q, ftf_array.header.stamp, f"aruco_{id}", ftf_array.header.frame_id)
         self.ftf_pub.publish(ftf_array)
 
 
