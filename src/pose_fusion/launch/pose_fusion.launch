@@ -1,4 +1,5 @@
 <launch>
+
     <!-- EKF Node -->
     <!-- <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node" clear_params="true">
         <rosparam command="load" file="$(find pose_fusion)/params/pose_inputs.yaml"/>
@@ -8,7 +9,7 @@
     <node pkg="pose_fusion" type="fake_aruco.py" name="fake_aruco"/>
     <node pkg="pose_fusion" type="fake_imu.py" name="fake_imu"/>
 
-    <!-- Fake TF nodes to link frames -->
+    <!-- Fake TF nodes to link sensor frames -->
     <node pkg="tf" name="base_to_camera" type="static_transform_publisher"
         args="0 0 0 0 0 0 base_link camera_link 1">
     </node>
@@ -18,4 +19,19 @@
     <node pkg="tf" name="link_to_imu" type="static_transform_publisher"
         args="0 0 0 0 0 0 camera_link imu_frame 1">
     </node>
+
+    <!-- Fake TF nodes to simulate linked rigid body -->
+    <node pkg="tf" name="base_to_1" type="static_transform_publisher"
+        args="0 0 0.5 0 0 0 base_link link_1 1">
+    </node>
+    <node pkg="tf" name="link_1_2" type="static_transform_publisher"
+        args="0.5 0 0 0 0 0 link_1 link_2 1">
+    </node>
+    <node pkg="tf" name="link_2_3" type="static_transform_publisher"
+        args="0 0 0.5 0 0 0 link_2 link_3 1">
+    </node>
+
+    <!-- Visualisation -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pose_fusion)/rviz/settings.rviz" required="true"/>
+
 </launch>
