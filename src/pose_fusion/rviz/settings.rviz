@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 459
   - Class: rviz/Selection
@@ -57,15 +59,23 @@ Visualization Manager:
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
+        aruco_1:
+          Value: true
+        aruco_2:
+          Value: true
+        aruco_3:
+          Value: true
+        aruco_4:
+          Value: true
         base_link:
           Value: true
         camera_color_optical_frame:
-          Value: true
+          Value: false
         camera_link:
           Value: true
         imu_frame:
-          Value: true
+          Value: false
         link_1:
           Value: true
         link_2:
@@ -82,7 +92,14 @@ Visualization Manager:
         base_link:
           camera_link:
             camera_color_optical_frame:
-              {}
+              aruco_1:
+                {}
+              aruco_2:
+                {}
+              aruco_3:
+                {}
+              aruco_4:
+                {}
             imu_frame:
               {}
           link_1:
@@ -119,7 +136,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.805309534072876
+      Distance: 4.052099704742432
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -135,9 +152,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6453983187675476
+      Pitch: 0.6003984808921814
       Target Frame: <Fixed Frame>
-      Yaw: 0.6653997302055359
+      Yaw: 0.34540241956710815
     Saved: ~
 Window Geometry:
   Displays:
@@ -155,5 +172,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1287
-  X: 394
-  Y: 18
+  X: 2182
+  Y: 3
