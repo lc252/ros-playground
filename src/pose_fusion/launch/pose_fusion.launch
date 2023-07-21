@@ -47,5 +47,6 @@
 
     <!-- Visualisation -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pose_fusion)/rviz/settings.rviz" required="true"/>
+    <node pkg="rqt_tf_tree" type="rqt_tf_tree" name="rqt_tf_tree"/>
 
 </launch>
