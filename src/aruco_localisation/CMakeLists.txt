@@ -9,7 +9,7 @@ project(aruco_localisation)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   aruco_detect
-  fiducial_slam
+  # fiducial_slam
   roscpp
   rospy
   tf

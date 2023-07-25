@@ -10,8 +10,8 @@ project(scan_object)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   interactive_markers
-  octomap
-  octomap_server
+  # octomap
+  # octomap_server
   pcl_conversions
   pcl_ros
   realsense2_camera
