@@ -85,8 +85,10 @@ void make6DofMarker()
 {
     InteractiveMarker int_marker;
     int_marker.header.frame_id = "base_link";
-    tf::Vector3 position = tf::Vector3(0, 0, 0);
-    tf::pointTFToMsg(position, int_marker.pose.position);
+    tf::Pose pose;
+    pose.setOrigin(tf::Vector3(0, 0, 0));
+    pose.setRotation(tf::Quaternion(0, 0, 0, 1));
+    tf::poseTFToMsg(pose, int_marker.pose);
     int_marker.scale = 0.2;
 
     int_marker.name = "simple_6dof";

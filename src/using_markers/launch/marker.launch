@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find using_markers)/rviz/settings.rviz" required="true"/>
+    <node pkg="using_markers" type="interactive6dof" name="arrow"/>
+    <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
+</launch>
