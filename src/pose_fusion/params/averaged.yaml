@@ -1,7 +1,7 @@
 map_frame: map            # Defaults to "map", removed since unused - world_frame is set to odom_frame
-odom_frame: base_link
+odom_frame: world
 base_link_frame: camera_link
-world_frame: base_link
+world_frame: world
 
 # A pose estimator for each Aruco
 pose0: pose/filtered

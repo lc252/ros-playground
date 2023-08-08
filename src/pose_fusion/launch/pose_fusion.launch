@@ -2,7 +2,8 @@
 
     <!-- EKF Node -->
     <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node" clear_params="true">
-        <rosparam command="load" file="$(find pose_fusion)/params/pose_inputs.yaml"/>
+        <rosparam command="load" file="$(find pose_fusion)/params/averaged.yaml"/>
+        <!-- <rosparam command="load" file="$(find pose_fusion)/params/pose_inputs.yaml"/> -->
     </node>
 
     <!-- Fake Sensors -->
@@ -10,7 +11,8 @@
     <node pkg="pose_fusion" type="fake_imu.py" name="fake_imu"/>
 
     <!-- Transform message conversion -->
-    <node pkg="pose_fusion" type="aruco_msg_to_pose.py" name="converter"/>
+    <!-- <node pkg="pose_fusion" type="aruco_msg_to_pose.py" name="converter"/> -->
+    <node pkg="pose_fusion" type="ftf_average.py" name="converter"/>
 
     <!-- Fake TF nodes to link sensor frames -->
     <node pkg="tf" name="link_to_optical" type="static_transform_publisher"
@@ -21,6 +23,9 @@
     </node>
 
     <!-- Fake TF nodes to simulate linked rigid body -->
+    <node pkg="tf" name="world_to_base" type="static_transform_publisher"
+        args="0 0 0 0 0 0 world base_link 1">
+    </node>
     <node pkg="tf" name="base_to_1" type="static_transform_publisher"
         args="0 0 0.5 0 0 0 base_link link_1 1">
     </node>
@@ -32,18 +37,18 @@
     </node>
 
     <!-- Transform from arucos to rigid body -->
-    <!-- <node pkg="tf" name="ar_1" type="static_transform_publisher"
-        args="0 0 0 0 0 0 aruco_1 base_link 1">
+    <node pkg="tf" name="ar_1" type="static_transform_publisher"
+        args="0 0 0 0 0 0 base_link aruco_1_known 1">
     </node>    
     <node pkg="tf" name="ar_2" type="static_transform_publisher"
-        args="0 0 0 0 0 0 aruco_2 base_link 1">
+        args="0 0 0 0 0 0 link_1 aruco_2_known 1">
     </node>    
     <node pkg="tf" name="ar_3" type="static_transform_publisher"
-        args="0 0 0 0 0 0 aruco_3 base_link 1">
+        args="0 0 0 0 0 0 link_2 aruco_3_known 1">
     </node>    
     <node pkg="tf" name="ar_4" type="static_transform_publisher"
-        args="0 0 0 0 0 0 aruco_4 base_link 1">
-    </node> -->
+        args="0 0 0 0 0 0 link_3 aruco_4_known 1">
+    </node>
 
     <!-- Visualisation -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pose_fusion)/rviz/settings.rviz" required="true"/>
