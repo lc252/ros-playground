@@ -69,8 +69,9 @@ class ftf_average():
         ftf : FiducialTransform
         for ftf in ftf_arr.transforms:
             # apply a transform back to the base link based on the fiducial id and known aruco positions
-            self.listener.waitForTransform(f"aruco_{ftf.fiducial_id}_known", f"base_link", rospy.Time.now(), rospy.Duration(0.1))
-            known_tf = self.listener.lookupTransform(f"aruco_{ftf.fiducial_id}_known", f"base_link", rospy.Time.now())
+            lookup_time = rospy.Time.now()
+            self.listener.waitForTransform(f"aruco_{ftf.fiducial_id}_known", f"base_link", lookup_time, rospy.Duration(0.1))
+            known_tf = self.listener.lookupTransform(f"aruco_{ftf.fiducial_id}_known", f"base_link", lookup_time)
 
             # apply the transform to the fiducial transform
             # ftf.transform = ftf.transform * known_tf
