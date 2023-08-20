@@ -15,9 +15,6 @@
     <node pkg="pose_fusion" type="ftf_average.py" name="converter"/>
 
     <!-- Fake TF nodes to link sensor frames -->
-    <!-- <node pkg="tf" name="link_to_optical" type="static_transform_publisher"
-        args="0 0.015 0 0.5 -0.5 0.5 -0.5 camera_link camera_color_optical_frame 1">
-    </node> -->
     <node pkg="tf" name="link_to_optical" type="static_transform_publisher"
         args="0 0.015 0 -1.571 0 -1.571 camera_link camera_color_optical_frame 1">
     </node>
@@ -27,7 +24,7 @@
 
     <!-- Fake TF nodes to simulate linked rigid body -->
     <node pkg="tf" name="world_to_base" type="static_transform_publisher"
-        args="0 0 0 0 0 0 world base_link 1">
+        args="0 1 0 0 0 0 world base_link 1">
     </node>
     <node pkg="tf" name="base_to_1" type="static_transform_publisher"
         args="0 0 0.5 0 0 0 base_link link_1 1">
