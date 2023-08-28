@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "pcd_publisher");
     ros::NodeHandle n;
 
-    ros::Rate loop_rate(1);
+    ros::Rate loop_rate(0.5);
 
     pub = n.advertise<sensor_msgs::PointCloud2>("raw_points", 1);
 
@@ -119,11 +119,9 @@ int main(int argc, char **argv)
         for (int i=0; i<=6; i++)
         {
             read_obj_cb(i);
-            // delay 2 seconds
-            ros::Duration(2).sleep();
+            ros::spinOnce();
+            loop_rate.sleep();
         }
-        ros::spinOnce();
-        loop_rate.sleep();
     }
 
     return 0;
