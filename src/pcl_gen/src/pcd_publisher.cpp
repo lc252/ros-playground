@@ -1,15 +1,24 @@
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/obj_io.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl/filters/passthrough.h>
-#include <pcl/filters/conditional_removal.h>
+#include <pcl/common/transforms.h>
 
 ros::Publisher pub;
 
-typedef pcl::FieldComparison<pcl::PointXYZ> FieldComp;
+enum Links
+{
+    base_link,
+    link_1,
+    link_2,
+    link_3,
+    link_4,
+    link_5,
+    link_6
+};
 
 int read_pcd_cb(std::string filename)
 {
@@ -27,55 +36,73 @@ int read_pcd_cb(std::string filename)
     return 0;
 }
 
-int read_obj_cb(std::string filename)
+int read_obj_cb(int link_num)
 {
+    ROS_INFO("%i", link_num);
+
+    std::string link_name;
+    float quat_f[4] = {0,0,0,1};
+    Eigen::Vector3f tran;
+    switch (link_num)
+    {
+    case Links::base_link:
+        tran << 0, 0, 0;
+        quat_f[0] = 0; quat_f[1] = 0; quat_f[2] = 0; quat_f[3] = 1;
+        link_name = "base_link";
+        break;
+    case Links::link_1:
+        tran << 0, 0, 0;
+        quat_f[0] = -0.7071; quat_f[1] = 0; quat_f[2] = 0; quat_f[3] = 0.7071;
+        link_name = "link_1";
+        break;
+    case Links::link_2:
+        tran << 0, 0, 0.35;
+        quat_f[0] = -0.5; quat_f[1] = -0.5; quat_f[2] = -0.5; quat_f[3] = 0.5;
+        link_name = "link_2";
+        break;
+    case Links::link_3:
+        tran << 0, -0.0025, 0.042;
+        quat_f[0] = 0.7071; quat_f[1] = 0; quat_f[2] = 0.7071; quat_f[3] = 0;
+        link_name = "link_3";
+        break;
+    case Links::link_4:
+        tran << 0.351, 0, 0;
+        quat_f[0] = -0.5; quat_f[1] = -0.5; quat_f[2] = -0.5; quat_f[3] = 0.5;
+        link_name = "link_4";
+        break;
+    case Links::link_5:
+        tran << 0, 0, 0;
+        quat_f[0] = 0.7071; quat_f[1] = 0; quat_f[2] = 0.7071; quat_f[3] = 0;
+        link_name = "link_5";
+        break;
+    case Links::link_6:
+        tran << 0, 0, 0;
+        quat_f[0] = 0; quat_f[1] = 0.7071; quat_f[2] = 0; quat_f[3] = 0.7071;
+        link_name = "link_6";
+        break;
+    }
+
+    ROS_INFO("%s", link_name.c_str());
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr object(new pcl::PointCloud<pcl::PointXYZ>);
+    std::string filename = "/home/lachl/ros-playground/src/pcl_gen/pcd_files/" + link_name + ".obj";
 
     pcl::io::loadOBJFile<pcl::PointXYZ>(filename, *object);
 
-    pcl::PassThrough<pcl::PointXYZ> pass;
-    // keep everything except bottom
-    pass.setInputCloud(object);
-    pass.setFilterFieldName("z");
-    pass.setFilterLimits(0, 0.5);
-    pass.filter(*object);
-
-    // remove front wheels
-    pcl::ConditionOr<pcl::PointXYZ>::Ptr front_wheel(new pcl::ConditionOr<pcl::PointXYZ>);
-    front_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("z", pcl::ComparisonOps::LT, 0)));
-    front_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("z", pcl::ComparisonOps::GT, 0.012)));
-    front_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("y", pcl::ComparisonOps::GT,  0.011)));
-    front_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("y", pcl::ComparisonOps::LT, -0.009)));
-
-    // remove back wheels
-    pcl::ConditionOr<pcl::PointXYZ>::Ptr back_wheel(new pcl::ConditionOr<pcl::PointXYZ>);
-    back_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("z", pcl::ComparisonOps::LT, 0)));
-    back_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("z", pcl::ComparisonOps::GT, 0.012)));
-    back_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("y", pcl::ComparisonOps::GT, -0.061)));
-    back_wheel->addComparison(FieldComp::ConstPtr (new FieldComp("y", pcl::ComparisonOps::LT, -0.079)));
-
-    pcl::ConditionalRemoval<pcl::PointXYZ> cond_rem;
-    cond_rem.setCondition(front_wheel);
-    cond_rem.setInputCloud(object);
-    cond_rem.filter(*object);
-    cond_rem.setInputCloud(object);
-    cond_rem.setCondition(back_wheel);
-    cond_rem.setInputCloud(object);
-    cond_rem.filter(*object);
-
+    // transform the point cloud to the correct orientation
+    Eigen::Matrix4f transform_1 = Eigen::Matrix4f::Identity();
+    Eigen::Quaternionf quat(quat_f[3], quat_f[0], quat_f[1], quat_f[2]);    // eigen takes w,x,y,z
+    transform_1.block<3,3>(0,0) = quat.toRotationMatrix();
+    transform_1.block<3,1>(0,3) = tran;
+    pcl::transformPointCloud(*object, *object, transform_1);
 
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(*object, output);
-    output.header.frame_id = "map";
+    output.header.frame_id = link_name;
 
     pub.publish(output);
 
     return 0;
-}
-
-void write_pcd_cb()
-{
-    ;//pcl::io::;
 }
 
 int main(int argc, char **argv)
@@ -89,8 +116,12 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-        // read_pcd_cb("/home/fif/lc252/srs-digital-twins/src/pcl_gen/pcd_files/chef.pcd");
-        read_obj_cb("/home/fif/lc252/inference-2d-3d/src/object_detection/obj_models/model_car_scaled.obj");
+        for (int i=0; i<=6; i++)
+        {
+            read_obj_cb(i);
+            // delay 2 seconds
+            ros::Duration(2).sleep();
+        }
         ros::spinOnce();
         loop_rate.sleep();
     }
