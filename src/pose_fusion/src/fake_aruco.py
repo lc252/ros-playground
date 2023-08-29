@@ -35,7 +35,7 @@ class fake_aruco():
         ftf_array.header.stamp = rospy.Time.now()
 
         # aruco 1
-        v3 = np.array([0.25,1,-0.5]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
+        v3 = np.array([-0.25,1,-0.5]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
         rand_q = transformations.quaternion_from_euler(*(np.random.normal(0, 0.001, 3)), 'ryxz')
         tf = Transform(Vector3(*v3), Quaternion(*rand_q))
         ftf = FiducialTransform(1, tf, 0, 0, 0)
@@ -43,26 +43,26 @@ class fake_aruco():
         self.tf_broadcaster.sendTransform(v3, rand_q, ftf_array.header.stamp, f"aruco_1", ftf_array.header.frame_id)
         
         # aruco 2
-        v3 = np.array([0.25,1,0]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
+        v3 = np.array([-0.25,1,0]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
         rand_q = transformations.quaternion_from_euler(*(np.random.normal(0, 0.001, 3)), 'ryxz')
         tf = Transform(Vector3(*v3), Quaternion(*rand_q))
-        ftf = FiducialTransform(1, tf, 0, 0, 0)
+        ftf = FiducialTransform(2, tf, 0, 0, 0)
         ftf_array.transforms.append(ftf)
         self.tf_broadcaster.sendTransform(v3, rand_q, ftf_array.header.stamp, f"aruco_2", ftf_array.header.frame_id)
 
         # aruco 3
-        v3 = np.array([-0.25,1,0]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
+        v3 = np.array([0.25,1,0]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
         rand_q = transformations.quaternion_from_euler(*(np.random.normal(0, 0.001, 3)), 'ryxz')
         tf = Transform(Vector3(*v3), Quaternion(*rand_q))
-        ftf = FiducialTransform(1, tf, 0, 0, 0)
+        ftf = FiducialTransform(3, tf, 0, 0, 0)
         ftf_array.transforms.append(ftf)
         self.tf_broadcaster.sendTransform(v3, rand_q, ftf_array.header.stamp, f"aruco_3", ftf_array.header.frame_id)
 
         # aruco 4
-        v3 = np.array([-0.25,1,0.5]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
+        v3 = np.array([0.25,1,0.5]) + np.random.normal(0, 0.01, 3)    # normally distributed noise
         rand_q = transformations.quaternion_from_euler(*(np.random.normal(0, 0.001, 3)), 'ryxz')
         tf = Transform(Vector3(*v3), Quaternion(*rand_q))
-        ftf = FiducialTransform(1, tf, 0, 0, 0)
+        ftf = FiducialTransform(4, tf, 0, 0, 0)
         ftf_array.transforms.append(ftf)
         self.tf_broadcaster.sendTransform(v3, rand_q, ftf_array.header.stamp, f"aruco_4", ftf_array.header.frame_id)
 
