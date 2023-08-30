@@ -43,41 +43,29 @@ int read_obj_cb(int link_num)
     std::string link_name;
     float quat_f[4] = {0,0,0,1};
     Eigen::Vector3f tran;
+    tran << 0, 0, 0;
+    quat_f[0] = 0; quat_f[1] = 0; quat_f[2] = 0; quat_f[3] = 1;
     switch (link_num)
     {
     case Links::base_link:
-        tran << 0, 0, 0;
-        quat_f[0] = 0; quat_f[1] = 0; quat_f[2] = 0; quat_f[3] = 1;
         link_name = "base_link";
         break;
     case Links::link_1:
-        tran << 0, 0, 0;
-        quat_f[0] = -0.7071; quat_f[1] = 0; quat_f[2] = 0; quat_f[3] = 0.7071;
         link_name = "link_1";
         break;
     case Links::link_2:
-        tran << 0, 0, 0.35;
-        quat_f[0] = -0.5; quat_f[1] = -0.5; quat_f[2] = -0.5; quat_f[3] = 0.5;
         link_name = "link_2";
         break;
     case Links::link_3:
-        tran << 0, -0.0025, 0.042;
-        quat_f[0] = 0.7071; quat_f[1] = 0; quat_f[2] = 0.7071; quat_f[3] = 0;
         link_name = "link_3";
         break;
     case Links::link_4:
-        tran << 0.351, 0, 0;
-        quat_f[0] = -0.5; quat_f[1] = -0.5; quat_f[2] = -0.5; quat_f[3] = 0.5;
         link_name = "link_4";
         break;
     case Links::link_5:
-        tran << 0, 0, 0;
-        quat_f[0] = 0.7071; quat_f[1] = 0; quat_f[2] = 0.7071; quat_f[3] = 0;
         link_name = "link_5";
         break;
     case Links::link_6:
-        tran << 0, 0, 0;
-        quat_f[0] = 0; quat_f[1] = 0.7071; quat_f[2] = 0; quat_f[3] = 0.7071;
         link_name = "link_6";
         break;
     }
@@ -85,9 +73,9 @@ int read_obj_cb(int link_num)
     ROS_INFO("%s", link_name.c_str());
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr object(new pcl::PointCloud<pcl::PointXYZ>);
-    std::string filename = "/home/lachl/ros-playground/src/pcl_gen/pcd_files/" + link_name + ".obj";
+    std::string filename = "/home/lachl/ros-playground/src/pcl_gen/pcd_files/" + link_name + ".pcd";
 
-    pcl::io::loadOBJFile<pcl::PointXYZ>(filename, *object);
+    pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *object);
 
     // transform the point cloud to the correct orientation
     Eigen::Matrix4f transform_1 = Eigen::Matrix4f::Identity();
@@ -96,6 +84,7 @@ int read_obj_cb(int link_num)
     transform_1.block<3,1>(0,3) = tran;
     pcl::transformPointCloud(*object, *object, transform_1);
 
+    // publish the point cloud
     sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(*object, output);
     output.header.frame_id = link_name;

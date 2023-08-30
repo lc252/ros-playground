@@ -210,3 +210,5 @@ catkin_install_python(PROGRAMS
 
 add_executable(pcd_publisher src/pcd_publisher.cpp)
 target_link_libraries(pcd_publisher ${catkin_LIBRARIES})
+add_executable(pcd_edit src/pcd_edit.cpp)
+target_link_libraries(pcd_edit ${catkin_LIBRARIES})
