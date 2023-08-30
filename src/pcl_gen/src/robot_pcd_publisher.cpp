@@ -96,7 +96,7 @@ int read_obj_cb(int link_num)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "pcd_publisher");
+    ros::init(argc, argv, "robot_pcd_publisher");
     ros::NodeHandle n;
 
     ros::Rate loop_rate(0.5);
