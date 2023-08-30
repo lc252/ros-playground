@@ -9,11 +9,11 @@
 
 ros::Publisher pub;
 
-int read_pcd_cb(std::string filename)
+int read_pcd_cb(std::string link_name)
 {
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr object(new pcl::PointCloud<pcl::PointXYZ>);
-    std::string filename = "/home/lachl/ros-playground/src/pcl_gen/pcd_files/" + filename + ".pcd";
+    std::string filename = "/home/lachl/ros-playground/src/pcl_gen/pcd_files/" + link_name + ".pcd";
 
     pcl::io::loadPCDFile<pcl::PointXYZ>(filename, *object);
 
